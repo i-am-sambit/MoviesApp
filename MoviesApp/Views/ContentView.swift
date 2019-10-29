@@ -14,17 +14,54 @@ struct ContentView: View {
         UITableView.appearance().separatorStyle = .none
     }
     
-    @ObservedObject var moviesDataSource: MoviesHomeViewModel = MoviesHomeViewModel()
+    @State var showingProfile = false
+    
+    var profileButton: some View {
+        Button(action: { self.showingProfile.toggle() }) {
+            Image(systemName: "person.crop.circle")
+                .imageScale(.large)
+                .accessibility(label: Text("User Profile"))
+                .padding()
+                .foregroundColor(.primary)
+        }
+    }
     
     var body: some View {
         NavigationView {
-            List {
+            TabView {
+                MovieHomeView()
+                .tabItem {
+                    Text("Movies")
+                    Image(systemName: "film")
+                }
+                
+                MovieHomeView()
+                .tabItem {
+                    Text("TV Series")
+                    Image(systemName: "tv")
+                }
+            }
+            .navigationBarTitle("Movies App")
+            .navigationBarItems(trailing: profileButton)
+            .sheet(isPresented: $showingProfile) {
+                Text("User Profile")
+            }
+        }
+    }
+}
+
+struct MovieHomeView: View {
+    @ObservedObject var moviesDataSource: MoviesHomeViewModel = MoviesHomeViewModel()
+    
+    var body: some View {
+        VStack {
+            
+            ScrollView(showsIndicators: false) {
                 MovieCategoryCell(category: "Now Playing", movies: moviesDataSource.nowPlayingMovies)
                 MovieCategoryCell(category: "Popular", movies: moviesDataSource.popularMovies)
                 MovieCategoryCell(category: "Upcoming", movies: moviesDataSource.upcomingMovies)
                 MovieCategoryCell(category: "Top Rated", movies: moviesDataSource.topRatedMovies)
             }
-            .navigationBarTitle("Movies")
         }
     }
 }
@@ -44,19 +81,17 @@ struct MovieCategoryCell: View {
                 .font(.title)
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack {
-                    ForEach(self.movies, id: \.movieID) { movie in
-                        NavigationLink(
-                            destination: MovieUIView(movie: movie)
-                        ) {
+                    ForEach(self.movies) { movie in
+                        NavigationLink(destination: MovieUIView(movie: movie)) {
                             MovieCard(movie: movie)
                         }
                     }
                 }
             }
             .frame(height: 280)
-            .padding(.leading, -10)
-            .padding(.trailing, -10)
         }
+        .padding(.leading, 20)
+        .padding(.trailing, 20)
     }
 }
 
@@ -72,6 +107,7 @@ struct MovieCard: View {
             URLImageView(urlString: movie.poster)
                 .frame(width: 250, height: 180)
                 .aspectRatio(contentMode: .fill)
+                .shadow(radius: 5)
                 .cornerRadius(10)
                 .clipped()
                 

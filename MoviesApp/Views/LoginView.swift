@@ -9,8 +9,33 @@
 import SwiftUI
 
 struct LoginView: View {
+    @State var email: String = ""
+    @State var password: String = ""
+    
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello World!"/*@END_MENU_TOKEN@*/)
+        VStack(alignment: .leading) {
+            Text("Username")
+                .font(.system(size: 20))
+                .foregroundColor(.primary)
+            TextField("Email", text: $email)
+                .frame(height: 40)
+            Rectangle()
+                .frame(height: 1.0, alignment: .bottom)
+                .foregroundColor(.primary)
+            
+            Text("Password")
+                .font(.system(size: 20))
+                .foregroundColor(.primary)
+            SecureField("Password", text: $password)
+                .frame(height: 40)
+            Rectangle()
+                .frame(height: 1.0, alignment: .bottom)
+                .foregroundColor(.primary)
+            
+            
+        }
+        .padding()
+//        .background(Color.green)
     }
 }
 

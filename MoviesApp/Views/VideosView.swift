@@ -23,7 +23,7 @@ struct VideosView: View {
 
 struct VideosView_Previews: PreviewProvider {
     static var previews: some View {
-        VideosView(videos: [MovieVideo(videoID: 0, videoKey: "https://www.youtube.com/watch?v=Gy_3Q241QNE", videoName: "", videoSite: "YouTube", videoType: "")])
+        VideosView(videos: [MovieVideo(id: 0, videoKey: "https://www.youtube.com/watch?v=Gy_3Q241QNE", videoName: "", videoSite: "YouTube", videoType: "")])
     }
 }
 
