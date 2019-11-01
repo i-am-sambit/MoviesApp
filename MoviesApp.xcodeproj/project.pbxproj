@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		36334E1B2363FE4C00635A86 /* MoviesHomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36334E1A2363FE4C00635A86 /* MoviesHomeViewModel.swift */; };
 		36334E20236412AC00635A86 /* URLImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36334E1F236412AC00635A86 /* URLImageView.swift */; };
+		363432B1236BE13A0008B756 /* HumbergerMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 363432B0236BE13A0008B756 /* HumbergerMenu.swift */; };
 		36345ECF23634C8400C2FDDF /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36345ECE23634C8400C2FDDF /* AppDelegate.swift */; };
 		36345ED123634C8400C2FDDF /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36345ED023634C8400C2FDDF /* SceneDelegate.swift */; };
 		36345ED323634C8400C2FDDF /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36345ED223634C8400C2FDDF /* ContentView.swift */; };
@@ -49,6 +50,7 @@
 		36330187236B486D000C21C1 /* MoviesApp.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = MoviesApp.entitlements; sourceTree = "<group>"; };
 		36334E1A2363FE4C00635A86 /* MoviesHomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoviesHomeViewModel.swift; sourceTree = "<group>"; };
 		36334E1F236412AC00635A86 /* URLImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLImageView.swift; sourceTree = "<group>"; };
+		363432B0236BE13A0008B756 /* HumbergerMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HumbergerMenu.swift; sourceTree = "<group>"; };
 		36345ECB23634C8400C2FDDF /* MoviesApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MoviesApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		36345ECE23634C8400C2FDDF /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		36345ED023634C8400C2FDDF /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -127,6 +129,7 @@
 				363780992366FB4200722F8A /* VideosView.swift */,
 				3637809B23671E6D00722F8A /* LoginView.swift */,
 				3637E38F236885FD00636953 /* RootView.swift */,
+				363432B0236BE13A0008B756 /* HumbergerMenu.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -340,6 +343,7 @@
 				363978342365A32C003AA3BE /* MovieModel.swift in Sources */,
 				3637E390236885FD00636953 /* RootView.swift in Sources */,
 				3639782F23657BBA003AA3BE /* Configs.swift in Sources */,
+				363432B1236BE13A0008B756 /* HumbergerMenu.swift in Sources */,
 				36345EFF236365BE00C2FDDF /* NetworkManager.swift in Sources */,
 				36345ECF23634C8400C2FDDF /* AppDelegate.swift in Sources */,
 				36345ED123634C8400C2FDDF /* SceneDelegate.swift in Sources */,
@@ -515,7 +519,6 @@
 				CODE_SIGN_ENTITLEMENTS = MoviesApp/MoviesApp.entitlements;
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
 				CODE_SIGN_STYLE = Automatic;
-				DERIVE_MACCATALYST_PRODUCT_BUNDLE_IDENTIFIER = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"MoviesApp/Preview Content\"";
 				DEVELOPMENT_TEAM = PJF7X4X36M;
 				ENABLE_PREVIEWS = YES;
@@ -526,7 +529,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.iamsambit.MoviesApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SUPPORTS_MACCATALYST = YES;
+				SUPPORTS_MACCATALYST = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -539,7 +542,6 @@
 				CODE_SIGN_ENTITLEMENTS = MoviesApp/MoviesApp.entitlements;
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
 				CODE_SIGN_STYLE = Automatic;
-				DERIVE_MACCATALYST_PRODUCT_BUNDLE_IDENTIFIER = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"MoviesApp/Preview Content\"";
 				DEVELOPMENT_TEAM = PJF7X4X36M;
 				ENABLE_PREVIEWS = YES;
@@ -550,7 +552,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.iamsambit.MoviesApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SUPPORTS_MACCATALYST = YES;
+				SUPPORTS_MACCATALYST = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -561,6 +563,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = PJF7X4X36M;
 				INFOPLIST_FILE = MoviesAppTests/Info.plist;
@@ -583,6 +586,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = PJF7X4X36M;
 				INFOPLIST_FILE = MoviesAppTests/Info.plist;
@@ -604,6 +608,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = PJF7X4X36M;
 				INFOPLIST_FILE = MoviesAppUITests/Info.plist;
@@ -624,6 +629,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = PJF7X4X36M;
 				INFOPLIST_FILE = MoviesAppUITests/Info.plist;

@@ -15,6 +15,7 @@ struct ContentView: View {
     }
     
     @State var showingProfile = false
+    @State var showingHambergerMenu = false
     
     var profileButton: some View {
         Button(action: { self.showingProfile.toggle() }) {
@@ -26,25 +27,47 @@ struct ContentView: View {
         }
     }
     
+    var hambergerMenuButton: some View {
+        Button(action: { self.showingHambergerMenu.toggle() }) {
+            Image(systemName: "line.horizontal.3")
+                .imageScale(.large)
+                .accessibility(label: Text("Hamberger Menu"))
+                .padding()
+                .foregroundColor(.primary)
+        }
+    }
+    
     var body: some View {
-        NavigationView {
-            TabView {
-                MovieHomeView()
-                .tabItem {
-                    Text("Movies")
-                    Image(systemName: "film")
-                }
+//        NavigationView {
+            ZStack(alignment: .leading) {
+//                HumbergerMenu()
+//                .frame(width: 300)
                 
-                MovieHomeView()
-                .tabItem {
-                    Text("TV Series")
-                    Image(systemName: "tv")
-                }
+                HomeView()
             }
-            .navigationBarTitle("Movies App")
+            
+            .navigationBarItems(leading: hambergerMenuButton)
             .navigationBarItems(trailing: profileButton)
-            .sheet(isPresented: $showingProfile) {
-                Text("User Profile")
+//            .sheet(isPresented: $showingProfile) {
+//                Text("User Profile")
+//            }
+//        }
+    }
+}
+
+struct HomeView: View {
+    var body: some View {
+        TabView {
+            MovieHomeView()
+            .tabItem {
+                Text("Movies")
+                Image(systemName: "film")
+            }
+            
+            MovieHomeView()
+            .tabItem {
+                Text("TV Series")
+                Image(systemName: "tv")
             }
         }
     }
@@ -54,14 +77,17 @@ struct MovieHomeView: View {
     @ObservedObject var moviesDataSource: MoviesHomeViewModel = MoviesHomeViewModel()
     
     var body: some View {
-        VStack {
-            
-            ScrollView(showsIndicators: false) {
-                MovieCategoryCell(category: "Now Playing", movies: moviesDataSource.nowPlayingMovies)
-                MovieCategoryCell(category: "Popular", movies: moviesDataSource.popularMovies)
-                MovieCategoryCell(category: "Upcoming", movies: moviesDataSource.upcomingMovies)
-                MovieCategoryCell(category: "Top Rated", movies: moviesDataSource.topRatedMovies)
+        NavigationView {
+            VStack {
+                ScrollView(showsIndicators: false) {
+                    MovieCategoryCell(category: "Now Playing", movies: moviesDataSource.nowPlayingMovies)
+                    MovieCategoryCell(category: "Popular", movies: moviesDataSource.popularMovies)
+                    MovieCategoryCell(category: "Upcoming", movies: moviesDataSource.upcomingMovies)
+                    MovieCategoryCell(category: "Top Rated", movies: moviesDataSource.topRatedMovies)
+                }
             }
+            .navigationBarTitle("Movies App")
+            .navigationBarHidden(true)
         }
     }
 }
