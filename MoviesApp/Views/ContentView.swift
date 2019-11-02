@@ -92,9 +92,9 @@ struct TVHomeView: View {
 
 struct MovieCategoryCell: View {
     var category: String
-    var movies:  [MovieProtocol]
+    var movies:  [MovieBaseProtocol]
     
-    init(category: String, movies: [MovieProtocol]) {
+    init(category: String, movies: [MovieBaseProtocol]) {
         self.category = category
         self.movies = movies
     }
@@ -120,9 +120,9 @@ struct MovieCategoryCell: View {
 }
 
 struct MovieCard: View {
-    var movie: MovieProtocol
+    var movie: MovieBaseProtocol
     
-    init(movie: MovieProtocol) {
+    init(movie: MovieBaseProtocol) {
         self.movie = movie
     }
     

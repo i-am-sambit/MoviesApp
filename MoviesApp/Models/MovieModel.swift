@@ -8,7 +8,7 @@
 
 import Foundation
 
-protocol MovieProtocol {
+protocol MovieBaseProtocol {
     var id:          Int { get set }
     var name:        String { get set }
     var overview:    String { get set }
@@ -30,7 +30,7 @@ struct MoviesResponse: Decodable {
     }
 }
 
-struct Movie: MovieProtocol, Hashable, Decodable {
+struct Movie: MovieBaseProtocol, Hashable, Decodable {
     var id:          Int
     var name:        String
     var overview:    String
@@ -60,7 +60,7 @@ struct TVResponse: Decodable {
     }
 }
 
-struct TVAiring: MovieProtocol, Hashable, Decodable {
+struct TVAiring: MovieBaseProtocol, Hashable, Decodable {
     var id:          Int
     var name:        String
     var overview:    String

@@ -9,7 +9,7 @@
 import SwiftUI
 
 struct MovieUIView: View {
-    var movie: MovieProtocol
+    var movie: MovieBaseProtocol
     
     @State var moveToTrailer: Bool = false
     
