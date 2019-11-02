@@ -17,26 +17,6 @@ struct ContentView: View {
     @State var showingProfile = false
     @State var showingHambergerMenu = false
     
-    var profileButton: some View {
-        Button(action: { self.showingProfile.toggle() }) {
-            Image(systemName: "person.crop.circle")
-                .imageScale(.large)
-                .accessibility(label: Text("User Profile"))
-                .padding()
-                .foregroundColor(.primary)
-        }
-    }
-    
-    var hambergerMenuButton: some View {
-        Button(action: { self.showingHambergerMenu.toggle() }) {
-            Image(systemName: "line.horizontal.3")
-                .imageScale(.large)
-                .accessibility(label: Text("Hamberger Menu"))
-                .padding()
-                .foregroundColor(.primary)
-        }
-    }
-    
     var body: some View {
         ZStack(alignment: .leading) {
             HomeView()
@@ -57,7 +37,7 @@ struct HomeView: View {
                 Image(systemName: "film")
             }
             
-            MovieHomeView()
+            TVHomeView()
             .tabItem {
                 Text("TV Series")
                 Image(systemName: "tv")
@@ -88,11 +68,33 @@ struct MovieHomeView: View {
     }
 }
 
+struct TVHomeView: View {
+    @ObservedObject var tvDataSource: MoviesHomeViewModel = MoviesHomeViewModel()
+    
+    var body: some View {
+        NavigationView {
+            VStack {
+                HeaderView()
+                .frame(height: 50.0)
+                
+                ScrollView(showsIndicators: false) {
+                    MovieCategoryCell(category: "TV Airing Today", movies: tvDataSource.tvAiringToday)
+                    MovieCategoryCell(category: "TV on the Air", movies: tvDataSource.tvOnAir)
+                    MovieCategoryCell(category: "Popular", movies: tvDataSource.tvPopular)
+                    MovieCategoryCell(category: "Top Rated", movies: tvDataSource.tvTopRated)
+                }
+            }
+            .navigationBarTitle("Movies App")
+            .navigationBarHidden(true)
+        }
+    }
+}
+
 struct MovieCategoryCell: View {
     var category: String
-    var movies:  [Movie]
+    var movies:  [MovieProtocol]
     
-    init(category: String, movies: [Movie]) {
+    init(category: String, movies: [MovieProtocol]) {
         self.category = category
         self.movies = movies
     }
@@ -103,7 +105,7 @@ struct MovieCategoryCell: View {
                 .font(.title)
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack {
-                    ForEach(self.movies) { movie in
+                    ForEach(self.movies, id: \.id) { movie in
                         NavigationLink(destination: MovieUIView(movie: movie)) {
                             MovieCard(movie: movie)
                         }
@@ -118,9 +120,9 @@ struct MovieCategoryCell: View {
 }
 
 struct MovieCard: View {
-    var movie: Movie
+    var movie: MovieProtocol
     
-    init(movie: Movie) {
+    init(movie: MovieProtocol) {
         self.movie = movie
     }
     
@@ -129,10 +131,10 @@ struct MovieCard: View {
             URLImageView(urlString: movie.poster)
                 .frame(width: 250, height: 180)
                 .aspectRatio(contentMode: .fill)
-                .shadow(radius: 5)
-                .cornerRadius(10)
                 .clipped()
-                
+                .cornerRadius(10)
+                .shadow(color: .primary, radius: 5, x: 0, y: 0)
+            
             VStack(alignment: .leading) {
                 Text(movie.name)
                     .font(.headline)

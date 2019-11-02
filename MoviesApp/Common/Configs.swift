@@ -9,6 +9,19 @@
 import Foundation
 
 enum WebServiceConstats {
-    static let endPoint = "https://api.themoviedb.org/3/movie"
-    static let kAPIKey = "5a439649b46466212e07515d87737c1a"
+    static let kEndPoint = "https://api.themoviedb.org/3/"
+    static let kAPIKey   = "5a439649b46466212e07515d87737c1a"
+    static let kMovie    = "movie/"
+    static let kTV       = "tv/"
+    
+}
+
+enum OperationNameConstants {
+    static let kNowPlaying     = "now_playing"
+    static let kPopular        = "popular"
+    static let kUpcoming       = "upcoming"
+    static let kTopRated       = "top_rated"
+    static let kAiringToday    = "airing_today"
+    static let kOnAir          = "on_the_air"
+    
 }

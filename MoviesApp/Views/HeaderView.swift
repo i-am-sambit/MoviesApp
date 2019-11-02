@@ -9,10 +9,12 @@
 import SwiftUI
 
 struct HeaderView: View {
+    @State var showHambergerMenu: Bool = false
+    
     var body: some View {
         HStack {
             Button(action: {
-                
+                self.showHambergerMenu.toggle()
             }) {
                 Image(systemName: "text.justify")
                     .imageScale(.large)
@@ -22,12 +24,12 @@ struct HeaderView: View {
             }
             
             Text("Movies App")
-                .font(.title)
+                .font(.largeTitle)
                 .foregroundColor(.primary)
             
             Spacer()
         }
-        .padding(.bottom)
+        .padding(.vertical)
     }
 }
 
