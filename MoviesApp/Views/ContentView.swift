@@ -38,20 +38,13 @@ struct ContentView: View {
     }
     
     var body: some View {
-//        NavigationView {
-            ZStack(alignment: .leading) {
-//                HumbergerMenu()
-//                .frame(width: 300)
-                
-                HomeView()
-            }
+        ZStack(alignment: .leading) {
+            HomeView()
             
-            .navigationBarItems(leading: hambergerMenuButton)
-            .navigationBarItems(trailing: profileButton)
-//            .sheet(isPresented: $showingProfile) {
-//                Text("User Profile")
-//            }
-//        }
+            HumbergerMenu()
+                .frame(width: 300)
+                .offset(x: -300)
+        }
     }
 }
 
@@ -79,6 +72,9 @@ struct MovieHomeView: View {
     var body: some View {
         NavigationView {
             VStack {
+                HeaderView()
+                    .frame(height: 50.0)
+                
                 ScrollView(showsIndicators: false) {
                     MovieCategoryCell(category: "Now Playing", movies: moviesDataSource.nowPlayingMovies)
                     MovieCategoryCell(category: "Popular", movies: moviesDataSource.popularMovies)
