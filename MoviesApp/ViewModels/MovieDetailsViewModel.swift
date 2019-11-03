@@ -17,7 +17,7 @@ class MovieDetailsViewModel: ObservableObject {
     
     init(movie: Movie) {
         self.movie = movie
-        self.fetchVideos(forMovie: movie.id)
+      self.fetchVideos(forMovie: movie.id)
     }
     
     private func fetchVideos(forMovie movieID: Int) {
