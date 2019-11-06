@@ -11,12 +11,12 @@ import SwiftUI
 struct HumbergerMenu: View {
     var body: some View {
         List {
-            ZStack {
-//                Image("avengers")
-//                    .resizable()
-//                    .frame(height: 250)
-//                    .aspectRatio(contentMode: .fit)
-//                    .clipped()
+            ZStack(alignment: .bottomLeading) {
+                Image("avengers")
+                    .resizable()
+                    .frame(height: 250)
+                    .aspectRatio(contentMode: .fit)
+                    .clipped()
                 Text("Jhon Doe")
                     .font(.title)
                     .foregroundColor(.white)
@@ -24,7 +24,6 @@ struct HumbergerMenu: View {
                     .padding(.bottom, 16)
             }
             .frame(minWidth: 50, maxWidth: .infinity, minHeight: 250, alignment: .bottomLeading)
-            .background(Color(red: 0.0, green: 0.329, blue: 0.576))
             .padding(.horizontal, -16)
             
             HStack {
@@ -44,7 +43,6 @@ struct HumbergerMenu: View {
                     .foregroundColor(.primary)
             }
         }
-        .edgesIgnoringSafeArea(.all)
         .statusBar(hidden: false)
     }
 }

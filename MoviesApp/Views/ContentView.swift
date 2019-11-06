@@ -15,32 +15,61 @@ struct ContentView: View {
     }
     
     @State var showingProfile = false
-    @State var showingHambergerMenu = false
+    @State var showHambergerMenu: Bool = false
+    @State var showMore: Bool = false
+    
+    var hambergerMenuButton: some View {
+        Button(action: {
+            withAnimation {
+                self.showHambergerMenu.toggle()
+            }
+            
+        }) {
+            Image(systemName: self.showHambergerMenu ? "chevron.left" : "line.horizontal.3")
+                .imageScale(.large)
+                .accessibility(label: Text("Hamberger Menu"))
+                .padding()
+                .foregroundColor(.primary)
+        }
+    }
     
     var body: some View {
-        ZStack(alignment: .leading) {
-            HomeView()
-            
-            HumbergerMenu()
-                .frame(width: 300)
-                .offset(x: -300)
+        NavigationView {
+//            NavigationLink(destination: MovieListView(), isActive: $showMore) {
+            ZStack(alignment: .leading) {
+                HomeView(showHambergerMenu: $showHambergerMenu, showMore: $showMore)
+                
+                if showHambergerMenu {
+                    HumbergerMenu()
+                        .frame(width: UIScreen.main.bounds.width)
+                        .transition(.offset(x: (-UIScreen.main.bounds.width)))
+                }
+            }
+//            }
+            .navigationBarTitle("Movies App", displayMode: .inline)
+            .navigationBarItems(leading: hambergerMenuButton)
         }
     }
 }
 
 struct HomeView: View {
+    @Binding var showHambergerMenu: Bool
+    @Binding var showMore: Bool
+    
     var body: some View {
-        TabView {
-            MovieHomeView()
-            .tabItem {
-                Text("Movies")
-                Image(systemName: "film")
-            }
-            
-            TVHomeView()
-            .tabItem {
-                Text("TV Series")
-                Image(systemName: "tv")
+        VStack {
+            TabView {
+                MovieHomeView(showMore: $showMore)
+                .tabItem {
+                    Text("Movies")
+                    Image(systemName: "film")
+                }
+                
+                TVHomeView(showMore: $showMore)
+                .tabItem {
+                    Text("TV Series")
+                    Image(systemName: "tv")
+                }
             }
         }
     }
@@ -49,21 +78,16 @@ struct HomeView: View {
 struct MovieHomeView: View {
     @ObservedObject var moviesDataSource: MoviesHomeViewModel = MoviesHomeViewModel()
     
+    @Binding var showMore: Bool
+    
     var body: some View {
-        NavigationView {
             VStack {
-                HeaderView()
-                    .frame(height: 50.0)
-                
-                ScrollView(showsIndicators: false) {
-                    MovieCategoryCell(category: "Now Playing", movies: moviesDataSource.nowPlayingMovies)
-                    MovieCategoryCell(category: "Popular", movies: moviesDataSource.popularMovies)
-                    MovieCategoryCell(category: "Upcoming", movies: moviesDataSource.upcomingMovies)
-                    MovieCategoryCell(category: "Top Rated", movies: moviesDataSource.topRatedMovies)
-                }
+            ScrollView(showsIndicators: false) {
+                MovieCategoryCell(category: "Now Playing", movies: moviesDataSource.nowPlayingMovies, showMore: $showMore)
+                MovieCategoryCell(category: "Popular", movies: moviesDataSource.popularMovies, showMore: $showMore)
+                MovieCategoryCell(category: "Upcoming", movies: moviesDataSource.upcomingMovies, showMore: $showMore)
+                MovieCategoryCell(category: "Top Rated", movies: moviesDataSource.topRatedMovies, showMore: $showMore)
             }
-            .navigationBarTitle("Movies App")
-            .navigationBarHidden(true)
         }
     }
 }
@@ -71,21 +95,16 @@ struct MovieHomeView: View {
 struct TVHomeView: View {
     @ObservedObject var tvDataSource: MoviesHomeViewModel = MoviesHomeViewModel()
     
+    @Binding var showMore: Bool
+    
     var body: some View {
-        NavigationView {
-            VStack {
-                HeaderView()
-                .frame(height: 50.0)
-                
-                ScrollView(showsIndicators: false) {
-                    MovieCategoryCell(category: "TV Airing Today", movies: tvDataSource.tvAiringToday)
-                    MovieCategoryCell(category: "TV on the Air", movies: tvDataSource.tvOnAir)
-                    MovieCategoryCell(category: "Popular", movies: tvDataSource.tvPopular)
-                    MovieCategoryCell(category: "Top Rated", movies: tvDataSource.tvTopRated)
-                }
+        VStack {
+            ScrollView(showsIndicators: false) {
+                MovieCategoryCell(category: "TV Airing Today", movies: tvDataSource.tvAiringToday, showMore: $showMore)
+                MovieCategoryCell(category: "TV on the Air", movies: tvDataSource.tvOnAir, showMore: $showMore)
+                MovieCategoryCell(category: "Popular", movies: tvDataSource.tvPopular, showMore: $showMore)
+                MovieCategoryCell(category: "Top Rated", movies: tvDataSource.tvTopRated, showMore: $showMore)
             }
-            .navigationBarTitle("Movies App")
-            .navigationBarHidden(true)
         }
     }
 }
@@ -94,15 +113,21 @@ struct MovieCategoryCell: View {
     var category: String
     var movies:  [MovieBaseProtocol]
     
-    init(category: String, movies: [MovieBaseProtocol]) {
-        self.category = category
-        self.movies = movies
-    }
+    @Binding var showMore: Bool
     
     var body: some View {
         VStack(alignment: .leading) {
-            Text(category)
-                .font(.title)
+            HStack {
+                Text(category)
+                    .font(.title)
+                    .foregroundColor(.primary)
+                Spacer()
+                Button(action: {
+                    self.showMore.toggle()
+                }) {
+                    Text("See More")
+                }
+            }
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack {
                     ForEach(self.movies, id: \.id) { movie in
@@ -114,17 +139,12 @@ struct MovieCategoryCell: View {
             }
             .frame(height: 280)
         }
-        .padding(.leading, 20)
-        .padding(.trailing, 20)
+        .padding(.horizontal, 20)
     }
 }
 
 struct MovieCard: View {
     var movie: MovieBaseProtocol
-    
-    init(movie: MovieBaseProtocol) {
-        self.movie = movie
-    }
     
     var body: some View {
         VStack() {
@@ -133,7 +153,6 @@ struct MovieCard: View {
                 .aspectRatio(contentMode: .fill)
                 .clipped()
                 .cornerRadius(10)
-                .shadow(color: .primary, radius: 5, x: 0, y: 0)
             
             VStack(alignment: .leading) {
                 Text(movie.name)
@@ -141,7 +160,7 @@ struct MovieCard: View {
                     .foregroundColor(.primary)
                     .lineLimit(1)
                 Text(movie.overview)
-                    .font(.headline)
+                    .font(.callout)
                     .foregroundColor(.secondary)
             }
         }

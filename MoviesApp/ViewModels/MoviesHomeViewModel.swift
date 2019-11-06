@@ -10,8 +10,17 @@ import Foundation
 import SwiftUI
 import Combine
 
+struct Categories: Identifiable {
+    let id: Int
+    let name: String
+    let movies: [MovieBaseProtocol]
+}
+
 class MoviesHomeViewModel: ObservableObject {
     let objectWillChange: ObservableObjectPublisher = ObservableObjectPublisher()
+    var movieCategories: [Categories] = []
+    var tvCategories: [Categories] = []
+    
     private(set) var popularMovies: [Movie] = []
     private(set) var nowPlayingMovies: [Movie] = []
     private(set) var upcomingMovies: [Movie] = []
@@ -40,7 +49,8 @@ class MoviesHomeViewModel: ObservableObject {
                 switch result {
                     
                 case .success(let response):
-                    self.popularMovies = response.results
+                    let popularMovies = response.results
+                    self.movieCategories.append(Categories(id: 0, name: "Popular", movies: popularMovies))
                     self.objectWillChange.send()
                     break
                 case .failure(_):
@@ -56,7 +66,9 @@ class MoviesHomeViewModel: ObservableObject {
                 switch result {
                     
                 case .success(let response):
-                    self.nowPlayingMovies = response.results
+                    let nowPlayingMovies = response.results
+                    self.movieCategories.append(Categories(id: 1, name: "Now Playing", movies: nowPlayingMovies))
+                    
                     self.objectWillChange.send()
                     break
                 case .failure(_):
@@ -72,7 +84,8 @@ class MoviesHomeViewModel: ObservableObject {
                 switch result {
                     
                 case .success(let response):
-                    self.upcomingMovies = response.results
+                    let upcomingMovies = response.results
+                    self.movieCategories.append(Categories(id: 2, name: "Upcoming", movies: upcomingMovies))
                     self.objectWillChange.send()
                     break
                 case .failure(_):
@@ -88,7 +101,8 @@ class MoviesHomeViewModel: ObservableObject {
                 switch result {
                     
                 case .success(let response):
-                    self.topRatedMovies = response.results
+                    let topRatedMovies = response.results
+                    self.movieCategories.append(Categories(id: 3, name: "Top Rated", movies: topRatedMovies))
                     self.objectWillChange.send()
                     break
                 case .failure(_):

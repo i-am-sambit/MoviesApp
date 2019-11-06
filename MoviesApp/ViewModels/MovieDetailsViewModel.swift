@@ -12,10 +12,10 @@ import Combine
 class MovieDetailsViewModel: ObservableObject {
     let objectWillChange: ObservableObjectPublisher = ObservableObjectPublisher()
     
-    private(set) var movie: Movie
+    private(set) var movie: MovieBaseProtocol
     private(set) var videos: [MovieVideo] = []
     
-    init(movie: Movie) {
+    init(movie: MovieBaseProtocol) {
         self.movie = movie
         self.fetchVideos(forMovie: movie.id)
     }

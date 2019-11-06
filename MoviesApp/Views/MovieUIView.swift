@@ -11,7 +11,13 @@ import SwiftUI
 struct MovieUIView: View {
     var movie: MovieBaseProtocol
     
+//    @ObservedObject var movieDetails: MovieDetailsViewModel? = nil
     @State var moveToTrailer: Bool = false
+    
+    init(movie: MovieBaseProtocol) {
+        self.movie = movie
+//        self.movieDetails = MovieDetailsViewModel(movie: movie)
+    }
     
     var body: some View {
         NavigationLink(destination: VideosView(videos: []), isActive: $moveToTrailer) {

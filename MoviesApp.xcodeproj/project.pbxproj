@@ -28,6 +28,7 @@
 		363978342365A32C003AA3BE /* MovieModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 363978332365A32C003AA3BE /* MovieModel.swift */; };
 		363B6860236563B7003E73E8 /* MovieUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 363B685F236563B7003E73E8 /* MovieUIView.swift */; };
 		363DE81A236D24C800A4EC74 /* HeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 363DE819236D24C800A4EC74 /* HeaderView.swift */; };
+		36DB3E6B2370886400FF478B /* MovieListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36DB3E6A2370886400FF478B /* MovieListView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -76,6 +77,7 @@
 		363978332365A32C003AA3BE /* MovieModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieModel.swift; sourceTree = "<group>"; };
 		363B685F236563B7003E73E8 /* MovieUIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieUIView.swift; sourceTree = "<group>"; };
 		363DE819236D24C800A4EC74 /* HeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeaderView.swift; sourceTree = "<group>"; };
+		36DB3E6A2370886400FF478B /* MovieListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieListView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -133,6 +135,7 @@
 				3637E38F236885FD00636953 /* RootView.swift */,
 				363432B0236BE13A0008B756 /* HumbergerMenu.swift */,
 				363DE819236D24C800A4EC74 /* HeaderView.swift */,
+				36DB3E6A2370886400FF478B /* MovieListView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -343,6 +346,7 @@
 				36334E20236412AC00635A86 /* URLImageView.swift in Sources */,
 				363780982366C2A000722F8A /* MovieDetailsViewModel.swift in Sources */,
 				36397831236580B8003AA3BE /* WebServiceHandler.swift in Sources */,
+				36DB3E6B2370886400FF478B /* MovieListView.swift in Sources */,
 				363978342365A32C003AA3BE /* MovieModel.swift in Sources */,
 				3637E390236885FD00636953 /* RootView.swift in Sources */,
 				3639782F23657BBA003AA3BE /* Configs.swift in Sources */,

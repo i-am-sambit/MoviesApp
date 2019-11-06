@@ -9,12 +9,15 @@
 import SwiftUI
 
 struct HeaderView: View {
-    @State var showHambergerMenu: Bool = false
+    @Binding var showHambergerMenu: Bool
     
     var body: some View {
         HStack {
             Button(action: {
-                self.showHambergerMenu.toggle()
+                withAnimation {
+                    self.showHambergerMenu = !self.showHambergerMenu
+                }
+                
             }) {
                 Image(systemName: "text.justify")
                     .imageScale(.large)
@@ -33,8 +36,8 @@ struct HeaderView: View {
     }
 }
 
-struct HeaderView_Previews: PreviewProvider {
-    static var previews: some View {
-        HeaderView()
-    }
-}
+//struct HeaderView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        HeaderView()
+//    }
+//}

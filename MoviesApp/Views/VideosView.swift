@@ -14,7 +14,7 @@ struct VideosView: View {
     
     var body: some View {
         List {
-            PlayerView(urlString: videos.first?.videoKey ?? "")
+            PlayerView(urlString: videos.first?.videoKey ?? "hTv13EjlLNg")
             .frame(height: 250)
         }
         .padding(.horizontal, -16)
@@ -39,6 +39,7 @@ struct PlayerView: UIViewControllerRepresentable {
         let player: AVPlayer = AVPlayer(url: url)
         let playerController = AVPlayerViewController()
         playerController.player = player
+        playerController.player?.play()
         return playerController
     }
     
