@@ -13,11 +13,12 @@ struct MovieListView: View {
     
     var body: some View {
         List {
-            ForEach(self.moviesDataSource.nowPlayingMovies, id: \.id) { movie in
+            Text("Hey Sam!!!")
+//            ForEach(self.moviesDataSource.nowPlayingMovies, id: \.id) { movie in
 //                NavigationLink(destination: MovieUIView(movie: movie)) {
-                    MovieCell(movie: movie)
+//                    MovieCell(movie: Movie)
 //                }
-            }
+//            }
         }
         .navigationBarTitle("Now Playing", displayMode: .inline)
     }

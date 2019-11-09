@@ -14,9 +14,12 @@ struct ContentView: View {
         UITableView.appearance().separatorStyle = .none
     }
     
+    @ObservedObject var moviesDataSource: MoviesHomeViewModel = MoviesHomeViewModel()
+    
     @State var showingProfile = false
     @State var showHambergerMenu: Bool = false
     @State var showMore: Bool = false
+    @State var isLoading: Bool = false
     
     var hambergerMenuButton: some View {
         Button(action: {
@@ -35,19 +38,17 @@ struct ContentView: View {
     
     var body: some View {
         NavigationView {
-//            NavigationLink(destination: MovieListView(), isActive: $showMore) {
             ZStack(alignment: .leading) {
-                HomeView(showHambergerMenu: $showHambergerMenu, showMore: $showMore)
+                HomeView(showHambergerMenu: self.$showHambergerMenu, showMore: self.$showMore)
                 
-                if showHambergerMenu {
+                if self.showHambergerMenu {
                     HumbergerMenu()
                         .frame(width: UIScreen.main.bounds.width)
                         .transition(.offset(x: (-UIScreen.main.bounds.width)))
                 }
             }
-//            }
             .navigationBarTitle("Movies App", displayMode: .inline)
-            .navigationBarItems(leading: hambergerMenuButton)
+            .navigationBarItems(leading: self.hambergerMenuButton)
         }
     }
 }
@@ -81,12 +82,13 @@ struct MovieHomeView: View {
     @Binding var showMore: Bool
     
     var body: some View {
+        LoadingView(isShowing: .constant((moviesDataSource.movieCategories.count < 4))) {
             VStack {
-            ScrollView(showsIndicators: false) {
-                MovieCategoryCell(category: "Now Playing", movies: moviesDataSource.nowPlayingMovies, showMore: $showMore)
-                MovieCategoryCell(category: "Popular", movies: moviesDataSource.popularMovies, showMore: $showMore)
-                MovieCategoryCell(category: "Upcoming", movies: moviesDataSource.upcomingMovies, showMore: $showMore)
-                MovieCategoryCell(category: "Top Rated", movies: moviesDataSource.topRatedMovies, showMore: $showMore)
+                ScrollView(showsIndicators: false) {
+                    ForEach(self.moviesDataSource.movieCategories) { category in
+                        MovieCategoryCell(category: category.name, movies: category.movies, showMore: self.$showMore)
+                    }
+                }
             }
         }
     }
@@ -98,12 +100,13 @@ struct TVHomeView: View {
     @Binding var showMore: Bool
     
     var body: some View {
-        VStack {
-            ScrollView(showsIndicators: false) {
-                MovieCategoryCell(category: "TV Airing Today", movies: tvDataSource.tvAiringToday, showMore: $showMore)
-                MovieCategoryCell(category: "TV on the Air", movies: tvDataSource.tvOnAir, showMore: $showMore)
-                MovieCategoryCell(category: "Popular", movies: tvDataSource.tvPopular, showMore: $showMore)
-                MovieCategoryCell(category: "Top Rated", movies: tvDataSource.tvTopRated, showMore: $showMore)
+        LoadingView(isShowing: .constant((tvDataSource.tvCategories.count < 4))) {
+            VStack {
+                ScrollView(showsIndicators: false) {
+                    ForEach(self.tvDataSource.tvCategories) { category in
+                        MovieCategoryCell(category: category.name, movies: category.movies, showMore: self.$showMore)
+                    }
+                }
             }
         }
     }
@@ -133,6 +136,21 @@ struct MovieCategoryCell: View {
                     ForEach(self.movies, id: \.id) { movie in
                         NavigationLink(destination: MovieUIView(movie: movie)) {
                             MovieCard(movie: movie)
+                                .contextMenu {
+                                    Button(action: {
+                                        // change country setting
+                                    }) {
+                                        Text("Choose Country")
+                                        Image(systemName: "globe")
+                                    }
+
+                                    Button(action: {
+                                        // enable geolocation
+                                    }) {
+                                        Text("Detect Location")
+                                        Image(systemName: "location.circle")
+                                    }
+                            }
                         }
                     }
                 }

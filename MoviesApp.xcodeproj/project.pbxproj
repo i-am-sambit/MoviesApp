@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3619852F2373217200F9C676 /* ActivityIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3619852E2373217200F9C676 /* ActivityIndicatorView.swift */; };
 		36334E1B2363FE4C00635A86 /* MoviesHomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36334E1A2363FE4C00635A86 /* MoviesHomeViewModel.swift */; };
 		36334E20236412AC00635A86 /* URLImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36334E1F236412AC00635A86 /* URLImageView.swift */; };
 		363432B1236BE13A0008B756 /* HumbergerMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 363432B0236BE13A0008B756 /* HumbergerMenu.swift */; };
@@ -49,6 +50,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		3619852E2373217200F9C676 /* ActivityIndicatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityIndicatorView.swift; sourceTree = "<group>"; };
 		36330187236B486D000C21C1 /* MoviesApp.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = MoviesApp.entitlements; sourceTree = "<group>"; };
 		36334E1A2363FE4C00635A86 /* MoviesHomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoviesHomeViewModel.swift; sourceTree = "<group>"; };
 		36334E1F236412AC00635A86 /* URLImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLImageView.swift; sourceTree = "<group>"; };
@@ -136,6 +138,7 @@
 				363432B0236BE13A0008B756 /* HumbergerMenu.swift */,
 				363DE819236D24C800A4EC74 /* HeaderView.swift */,
 				36DB3E6A2370886400FF478B /* MovieListView.swift */,
+				3619852E2373217200F9C676 /* ActivityIndicatorView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -360,6 +363,7 @@
 				3637809C23671E6D00722F8A /* LoginView.swift in Sources */,
 				36334E1B2363FE4C00635A86 /* MoviesHomeViewModel.swift in Sources */,
 				363B6860236563B7003E73E8 /* MovieUIView.swift in Sources */,
+				3619852F2373217200F9C676 /* ActivityIndicatorView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

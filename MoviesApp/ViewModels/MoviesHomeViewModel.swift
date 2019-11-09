@@ -18,18 +18,20 @@ struct Categories: Identifiable {
 
 class MoviesHomeViewModel: ObservableObject {
     let objectWillChange: ObservableObjectPublisher = ObservableObjectPublisher()
-    var movieCategories: [Categories] = []
-    var tvCategories: [Categories] = []
-    
-    private(set) var popularMovies: [Movie] = []
-    private(set) var nowPlayingMovies: [Movie] = []
-    private(set) var upcomingMovies: [Movie] = []
-    private(set) var topRatedMovies: [Movie] = []
-    
-    private(set) var tvAiringToday: [TVAiring] = []
-    private(set) var tvOnAir: [TVAiring] = []
-    private(set) var tvPopular: [TVAiring] = []
-    private(set) var tvTopRated: [TVAiring] = []
+    var movieCategories: [Categories] = [] {
+        didSet {
+            self.movieCategories.sort { (first, second) -> Bool in
+                first.id < second.id
+            }
+        }
+    }
+    var tvCategories: [Categories] = [] {
+           didSet {
+               self.tvCategories.sort { (first, second) -> Bool in
+                   first.id < second.id
+               }
+           }
+       }
     
     init() {
         fetchPopularMovies()
@@ -118,7 +120,8 @@ class MoviesHomeViewModel: ObservableObject {
                 switch result {
                     
                 case .success(let response):
-                    self.tvAiringToday = response.results
+                    let tvAiringToday = response.results
+                    self.tvCategories.append(Categories(id: 0, name: "Airing Today", movies: tvAiringToday))
                     self.objectWillChange.send()
                     break
                 case .failure(_):
@@ -134,7 +137,8 @@ class MoviesHomeViewModel: ObservableObject {
                 switch result {
                     
                 case .success(let response):
-                    self.tvOnAir = response.results
+                    let tvOnAir = response.results
+                    self.tvCategories.append(Categories(id: 1, name: "On Air", movies: tvOnAir))
                     self.objectWillChange.send()
                     break
                 case .failure(_):
@@ -150,7 +154,8 @@ class MoviesHomeViewModel: ObservableObject {
                 switch result {
                     
                 case .success(let response):
-                    self.tvPopular = response.results
+                    let tvPopular = response.results
+                    self.tvCategories.append(Categories(id: 2, name: "Popular", movies: tvPopular))
                     self.objectWillChange.send()
                     break
                 case .failure(_):
@@ -166,7 +171,8 @@ class MoviesHomeViewModel: ObservableObject {
                 switch result {
                     
                 case .success(let response):
-                    self.tvTopRated = response.results
+                    let tvTopRated = response.results
+                    self.tvCategories.append(Categories(id: 3, name: "Top Rated", movies: tvTopRated))
                     self.objectWillChange.send()
                     break
                 case .failure(_):

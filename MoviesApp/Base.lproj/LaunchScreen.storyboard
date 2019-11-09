@@ -14,7 +14,29 @@
                     <view key="view" contentMode="scaleToFill" id="Ze5-6b-2t3">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" red="0.0" green="0.32941176470588235" blue="0.57647058823529407" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <subviews>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="film.fill" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="Ux1-IQ-5GY">
+                                <rect key="frame" x="157" y="399" width="100" height="98"/>
+                                <color key="tintColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="100" id="loL-lm-VoO"/>
+                                    <constraint firstAttribute="height" constant="100" id="vAv-4P-Ygh"/>
+                                </constraints>
+                            </imageView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Movie App" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="n4u-nj-Svc">
+                                <rect key="frame" x="138" y="528" width="138" height="36"/>
+                                <fontDescription key="fontDescription" style="UICTFontTextStyleTitle0"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" cocoaTouchSystemColor="lightTextColor"/>
+                        <constraints>
+                            <constraint firstItem="n4u-nj-Svc" firstAttribute="top" secondItem="Ux1-IQ-5GY" secondAttribute="bottom" constant="30" id="8ws-5Q-AHi"/>
+                            <constraint firstItem="Ux1-IQ-5GY" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="WWp-UA-lXL"/>
+                            <constraint firstItem="n4u-nj-Svc" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="ema-25-u0x"/>
+                            <constraint firstItem="Ux1-IQ-5GY" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="or9-gp-HE5"/>
+                        </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
                 </viewController>
@@ -23,4 +45,7 @@
             <point key="canvasLocation" x="53" y="375"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="film.fill" catalog="system" width="64" height="48"/>
+    </resources>
 </document>
