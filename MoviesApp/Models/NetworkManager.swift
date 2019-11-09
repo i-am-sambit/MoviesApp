@@ -11,12 +11,12 @@ import UIKit
 class NetworkManager<Response: Decodable>: NSObject {
     typealias ServiceResult = ((Result<Response, Error>) -> Void)
     
-    private var urlString: String
+    private var url: URL
     private var request: Encodable?
     private var requestType: RequestType
     
-    init(urlString: String, request: Encodable? = nil, type: RequestType) {
-        self.urlString   = urlString
+    init(url: URL, request: Encodable? = nil, type: RequestType) {
+        self.url         = url
         self.request     = request
         self.requestType = type
     }
@@ -41,8 +41,7 @@ class NetworkManager<Response: Decodable>: NSObject {
     /// - Returns: URLRequest instance
     /// - Throws: error while enoding request
     private func getURLRequest() throws -> URLRequest {
-        let url = URL(string: self.urlString)
-        var urlRequest = URLRequest(url: url!)
+        var urlRequest = URLRequest(url: url)
         urlRequest.httpMethod = self.requestType.rawValue
         
         if let request = request {

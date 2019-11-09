@@ -29,6 +29,7 @@
 		363978342365A32C003AA3BE /* MovieModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 363978332365A32C003AA3BE /* MovieModel.swift */; };
 		363B6860236563B7003E73E8 /* MovieUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 363B685F236563B7003E73E8 /* MovieUIView.swift */; };
 		363DE81A236D24C800A4EC74 /* HeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 363DE819236D24C800A4EC74 /* HeaderView.swift */; };
+		365E237223767F6A00D9CE48 /* URLBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 365E237123767F6A00D9CE48 /* URLBuilder.swift */; };
 		36DB3E6B2370886400FF478B /* MovieListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36DB3E6A2370886400FF478B /* MovieListView.swift */; };
 /* End PBXBuildFile section */
 
@@ -79,6 +80,7 @@
 		363978332365A32C003AA3BE /* MovieModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieModel.swift; sourceTree = "<group>"; };
 		363B685F236563B7003E73E8 /* MovieUIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieUIView.swift; sourceTree = "<group>"; };
 		363DE819236D24C800A4EC74 /* HeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeaderView.swift; sourceTree = "<group>"; };
+		365E237123767F6A00D9CE48 /* URLBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLBuilder.swift; sourceTree = "<group>"; };
 		36DB3E6A2370886400FF478B /* MovieListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieListView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -122,6 +124,7 @@
 				36345EFE236365BE00C2FDDF /* NetworkManager.swift */,
 				36397830236580B8003AA3BE /* WebServiceHandler.swift */,
 				363978332365A32C003AA3BE /* MovieModel.swift */,
+				365E237123767F6A00D9CE48 /* URLBuilder.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -355,6 +358,7 @@
 				3639782F23657BBA003AA3BE /* Configs.swift in Sources */,
 				363432B1236BE13A0008B756 /* HumbergerMenu.swift in Sources */,
 				36345EFF236365BE00C2FDDF /* NetworkManager.swift in Sources */,
+				365E237223767F6A00D9CE48 /* URLBuilder.swift in Sources */,
 				36345ECF23634C8400C2FDDF /* AppDelegate.swift in Sources */,
 				363DE81A236D24C800A4EC74 /* HeaderView.swift in Sources */,
 				36345ED123634C8400C2FDDF /* SceneDelegate.swift in Sources */,

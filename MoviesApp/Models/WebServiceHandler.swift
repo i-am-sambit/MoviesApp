@@ -9,74 +9,118 @@
 import Foundation
 
 struct WebServiceHandler {
-    func fetchPopularMovies(complitionHandler:@escaping(Result<MoviesResponse, Error>)-> Void) {
-        let urlString: String = WebServiceConstats.kEndPoint + WebServiceConstats.kMovie + OperationNameConstants.kPopular + "?api_key=" + WebServiceConstats.kAPIKey + "&language=en-US&page=1"
-        
-        NetworkManager<MoviesResponse>(urlString: urlString, type: .get).request { (result) in
+    func fetchPopularMovies(page: Int = 1, complitionHandler:@escaping(Result<MoviesResponse, Error>)-> Void) {
+        guard let url = URLBuilder(scheme: WebServiceConstats.kScheme, host: WebServiceConstats.kHost)
+                            .set(path: WebServiceConstats.kDatabaseVersion + WebServiceConstats.kMovie + OperationNameConstants.kPopular)
+                            .addQueryItem(name: QueryConstants.Keys.kAPIKey, value: QueryConstants.Values.kAPIKey)
+                            .addQueryItem(name: QueryConstants.Keys.kLanguage, value: QueryConstants.Values.kLanguage)
+                            .addQueryItem(name: QueryConstants.Keys.kPage, value: page)
+                            .build()
+        else { return }
+        NetworkManager<MoviesResponse>(url: url, type: .get).request { (result) in
             complitionHandler(result)
         }
     }
 
-    func fetchNowPlayingMovies(complitionHandler:@escaping(Result<MoviesResponse, Error>)-> Void) {
-        let urlString: String = WebServiceConstats.kEndPoint + WebServiceConstats.kMovie + OperationNameConstants.kNowPlaying + "?api_key=" + WebServiceConstats.kAPIKey + "&language=en-US&page=1"
-        
-        NetworkManager<MoviesResponse>(urlString: urlString, type: .get).request { (result) in
+    func fetchNowPlayingMovies(page: Int = 1, complitionHandler:@escaping(Result<MoviesResponse, Error>)-> Void) {
+        guard let url = URLBuilder(scheme: WebServiceConstats.kScheme, host: WebServiceConstats.kHost)
+            .set(path: WebServiceConstats.kDatabaseVersion + WebServiceConstats.kMovie + OperationNameConstants.kNowPlaying)
+            .addQueryItem(name: QueryConstants.Keys.kAPIKey, value: QueryConstants.Values.kAPIKey)
+            .addQueryItem(name: QueryConstants.Keys.kLanguage, value: QueryConstants.Values.kLanguage)
+            .addQueryItem(name: QueryConstants.Keys.kPage, value: page)
+            .build()
+        else { return }
+        NetworkManager<MoviesResponse>(url: url, type: .get).request { (result) in
             complitionHandler(result)
         }
     }
     
-    func fetchUpcomingMovies(complitionHandler:@escaping(Result<MoviesResponse, Error>)-> Void) {
-        let urlString: String = WebServiceConstats.kEndPoint + WebServiceConstats.kMovie + OperationNameConstants.kUpcoming + "?api_key=" + WebServiceConstats.kAPIKey + "&language=en-US&page=1"
-        
-        NetworkManager<MoviesResponse>(urlString: urlString, type: .get).request { (result) in
+    func fetchUpcomingMovies(page: Int = 1,complitionHandler:@escaping(Result<MoviesResponse, Error>)-> Void) {
+        guard let url = URLBuilder(scheme: WebServiceConstats.kScheme, host: WebServiceConstats.kHost)
+                            .set(path: WebServiceConstats.kDatabaseVersion + WebServiceConstats.kMovie + OperationNameConstants.kUpcoming)
+                            .addQueryItem(name: QueryConstants.Keys.kAPIKey, value: QueryConstants.Values.kAPIKey)
+                            .addQueryItem(name: QueryConstants.Keys.kLanguage, value: QueryConstants.Values.kLanguage)
+                            .addQueryItem(name: QueryConstants.Keys.kPage, value: page)
+                            .build()
+        else { return }
+        NetworkManager<MoviesResponse>(url: url, type: .get).request { (result) in
             complitionHandler(result)
         }
     }
     
-    func fetchTopRatedMovies(complitionHandler:@escaping(Result<MoviesResponse, Error>)-> Void) {
-        let urlString: String = WebServiceConstats.kEndPoint + WebServiceConstats.kMovie + OperationNameConstants.kTopRated + "?api_key=" + WebServiceConstats.kAPIKey + "&language=en-US&page=1"
-        
-        NetworkManager<MoviesResponse>(urlString: urlString, type: .get).request { (result) in
+    func fetchTopRatedMovies(page: Int = 1, complitionHandler:@escaping(Result<MoviesResponse, Error>)-> Void) {
+        guard let url = URLBuilder(scheme: WebServiceConstats.kScheme, host: WebServiceConstats.kHost)
+                            .set(path: WebServiceConstats.kDatabaseVersion + WebServiceConstats.kMovie + OperationNameConstants.kTopRated)
+                            .addQueryItem(name: QueryConstants.Keys.kAPIKey, value: QueryConstants.Values.kAPIKey)
+                            .addQueryItem(name: QueryConstants.Keys.kLanguage, value: QueryConstants.Values.kLanguage)
+                            .addQueryItem(name: QueryConstants.Keys.kPage, value: page)
+                            .build()
+        else { return }
+        NetworkManager<MoviesResponse>(url: url, type: .get).request { (result) in
             complitionHandler(result)
         }
     }
     
     func fetchTrailerVideos(movie movieID: Int, complitionHandler:@escaping(Result<MovieVideoResponse, Error>)-> Void) {
-        let urlString: String = "\(WebServiceConstats.kEndPoint)/\(movieID)/videos?api_key=\(WebServiceConstats.kAPIKey)&language=en-US"
-        
-        NetworkManager<MovieVideoResponse>(urlString: urlString, type: .get).request { (result) in
+        guard let url = URLBuilder(scheme: WebServiceConstats.kScheme, host: WebServiceConstats.kHost)
+                            .set(path: "\(movieID)" + WebServiceConstats.kVideos)
+                            .addQueryItem(name: QueryConstants.Keys.kAPIKey, value: QueryConstants.Values.kAPIKey)
+                            .addQueryItem(name: QueryConstants.Keys.kLanguage, value: QueryConstants.Values.kLanguage)
+                            .build()
+        else { return }
+        NetworkManager<MovieVideoResponse>(url: url, type: .get).request { (result) in
             complitionHandler(result)
         }
     }
     
-    func fetchTvTodaysAiring(complitionHandler:@escaping(Result<TVResponse, Error>)-> Void) {
-        let urlString: String = (WebServiceConstats.kEndPoint) + WebServiceConstats.kTV + OperationNameConstants.kAiringToday + "?api_key=" + WebServiceConstats.kAPIKey + "&language=en-US&page=1"
-        
-        NetworkManager<TVResponse>(urlString: urlString, type: .get).request { (result) in
+    func fetchTvTodaysAiring(page: Int = 1, complitionHandler:@escaping(Result<TVResponse, Error>)-> Void) {
+        guard let url = URLBuilder(scheme: WebServiceConstats.kScheme, host: WebServiceConstats.kHost)
+                            .set(path: WebServiceConstats.kDatabaseVersion + WebServiceConstats.kTV + OperationNameConstants.kAiringToday)
+                            .addQueryItem(name: QueryConstants.Keys.kAPIKey, value: QueryConstants.Values.kAPIKey)
+                            .addQueryItem(name: QueryConstants.Keys.kLanguage, value: QueryConstants.Values.kLanguage)
+                            .addQueryItem(name: QueryConstants.Keys.kPage, value: page)
+                            .build()
+        else { return }
+        NetworkManager<TVResponse>(url: url, type: .get).request { (result) in
             complitionHandler(result)
         }
     }
     
-    func fetchTvOnTheAir(complitionHandler:@escaping(Result<TVResponse, Error>)-> Void) {
-        let urlString: String = (WebServiceConstats.kEndPoint) + WebServiceConstats.kTV + OperationNameConstants.kOnAir + "?api_key=" + WebServiceConstats.kAPIKey + "&language=en-US&page=1"
-        
-        NetworkManager<TVResponse>(urlString: urlString, type: .get).request { (result) in
+    func fetchTvOnTheAir(page: Int = 1, complitionHandler:@escaping(Result<TVResponse, Error>)-> Void) {
+        guard let url = URLBuilder(scheme: WebServiceConstats.kScheme, host: WebServiceConstats.kHost)
+                            .set(path: WebServiceConstats.kDatabaseVersion + WebServiceConstats.kTV + OperationNameConstants.kOnAir)
+                            .addQueryItem(name: QueryConstants.Keys.kAPIKey, value: QueryConstants.Values.kAPIKey)
+                            .addQueryItem(name: QueryConstants.Keys.kLanguage, value: QueryConstants.Values.kLanguage)
+                            .addQueryItem(name: QueryConstants.Keys.kPage, value: page)
+                            .build()
+        else { return }
+        NetworkManager<TVResponse>(url: url, type: .get).request { (result) in
             complitionHandler(result)
         }
     }
     
-    func fetchTvPopular(complitionHandler:@escaping(Result<TVResponse, Error>)-> Void) {
-        let urlString: String = (WebServiceConstats.kEndPoint) + WebServiceConstats.kTV + OperationNameConstants.kPopular + "?api_key=" + WebServiceConstats.kAPIKey + "&language=en-US&page=1"
-        
-        NetworkManager<TVResponse>(urlString: urlString, type: .get).request { (result) in
+    func fetchTvPopular(page: Int = 1, complitionHandler:@escaping(Result<TVResponse, Error>)-> Void) {
+        guard let url = URLBuilder(scheme: WebServiceConstats.kScheme, host: WebServiceConstats.kHost)
+                            .set(path: WebServiceConstats.kDatabaseVersion + WebServiceConstats.kTV + OperationNameConstants.kPopular)
+                            .addQueryItem(name: QueryConstants.Keys.kAPIKey, value: QueryConstants.Values.kAPIKey)
+                            .addQueryItem(name: QueryConstants.Keys.kLanguage, value: QueryConstants.Values.kLanguage)
+                            .addQueryItem(name: QueryConstants.Keys.kPage, value: page)
+                            .build()
+        else { return }
+        NetworkManager<TVResponse>(url: url, type: .get).request { (result) in
             complitionHandler(result)
         }
     }
     
-    func fetchTvTopRated(complitionHandler:@escaping(Result<TVResponse, Error>)-> Void) {
-        let urlString: String = (WebServiceConstats.kEndPoint) + WebServiceConstats.kTV + OperationNameConstants.kTopRated + "?api_key=" + WebServiceConstats.kAPIKey + "&language=en-US&page=1"
-        
-        NetworkManager<TVResponse>(urlString: urlString, type: .get).request { (result) in
+    func fetchTvTopRated(page: Int = 1, complitionHandler:@escaping(Result<TVResponse, Error>)-> Void) {
+        guard let url = URLBuilder(scheme: WebServiceConstats.kScheme, host: WebServiceConstats.kHost)
+                            .set(path: WebServiceConstats.kDatabaseVersion + WebServiceConstats.kTV + OperationNameConstants.kTopRated)
+                            .addQueryItem(name: QueryConstants.Keys.kAPIKey, value: QueryConstants.Values.kAPIKey)
+                            .addQueryItem(name: QueryConstants.Keys.kLanguage, value: QueryConstants.Values.kLanguage)
+                            .addQueryItem(name: QueryConstants.Keys.kPage, value: page)
+                            .build()
+        else { return }
+        NetworkManager<TVResponse>(url: url, type: .get).request { (result) in
             complitionHandler(result)
         }
     }
