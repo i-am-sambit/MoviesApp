@@ -11,7 +11,9 @@ import Foundation
 struct WebServiceHandler {
     func fetchPopularMovies(page: Int = 1, complitionHandler:@escaping(Result<MoviesResponse, Error>)-> Void) {
         guard let url = URLBuilder(scheme: WebServiceConstats.kScheme, host: WebServiceConstats.kHost)
-                            .set(path: WebServiceConstats.kDatabaseVersion + WebServiceConstats.kMovie + OperationNameConstants.kPopular)
+                            .set(path: WebServiceConstats.kDatabaseVersion
+                                     + WebServiceConstats.kMovie
+                                     + OperationNameConstants.kPopular)
                             .addQueryItem(name: QueryConstants.Keys.kAPIKey, value: QueryConstants.Values.kAPIKey)
                             .addQueryItem(name: QueryConstants.Keys.kLanguage, value: QueryConstants.Values.kLanguage)
                             .addQueryItem(name: QueryConstants.Keys.kPage, value: page)
@@ -24,11 +26,13 @@ struct WebServiceHandler {
 
     func fetchNowPlayingMovies(page: Int = 1, complitionHandler:@escaping(Result<MoviesResponse, Error>)-> Void) {
         guard let url = URLBuilder(scheme: WebServiceConstats.kScheme, host: WebServiceConstats.kHost)
-            .set(path: WebServiceConstats.kDatabaseVersion + WebServiceConstats.kMovie + OperationNameConstants.kNowPlaying)
-            .addQueryItem(name: QueryConstants.Keys.kAPIKey, value: QueryConstants.Values.kAPIKey)
-            .addQueryItem(name: QueryConstants.Keys.kLanguage, value: QueryConstants.Values.kLanguage)
-            .addQueryItem(name: QueryConstants.Keys.kPage, value: page)
-            .build()
+                            .set(path: WebServiceConstats.kDatabaseVersion
+                                     + WebServiceConstats.kMovie
+                                     + OperationNameConstants.kNowPlaying)
+                            .addQueryItem(name: QueryConstants.Keys.kAPIKey, value: QueryConstants.Values.kAPIKey)
+                            .addQueryItem(name: QueryConstants.Keys.kLanguage, value: QueryConstants.Values.kLanguage)
+                            .addQueryItem(name: QueryConstants.Keys.kPage, value: page)
+                            .build()
         else { return }
         NetworkManager<MoviesResponse>(url: url, type: .get).request { (result) in
             complitionHandler(result)

@@ -14,28 +14,31 @@ struct LoginView: View {
     
     var body: some View {
         VStack(alignment: .leading) {
+            Spacer()
+            
             Text("Username")
                 .font(.system(size: 20))
-                .foregroundColor(.primary)
+                .foregroundColor(.primary).colorInvert()
             TextField("Email", text: $email)
                 .frame(height: 40)
             Rectangle()
                 .frame(height: 1.0, alignment: .bottom)
-                .foregroundColor(.primary)
+                .foregroundColor(.primary).colorInvert()
             
             Text("Password")
                 .font(.system(size: 20))
-                .foregroundColor(.primary)
+                .foregroundColor(.primary).colorInvert()
             SecureField("Password", text: $password)
                 .frame(height: 40)
             Rectangle()
                 .frame(height: 1.0, alignment: .bottom)
-                .foregroundColor(.primary)
+                .foregroundColor(.primary).colorInvert()
             
-            
+            Spacer()
         }
         .padding()
-//        .background(Color.green)
+        .background(Color.secondary)
+        .edgesIgnoringSafeArea(.all)
     }
 }
 

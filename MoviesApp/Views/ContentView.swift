@@ -14,8 +14,6 @@ struct ContentView: View {
         UITableView.appearance().separatorStyle = .none
     }
     
-    @ObservedObject var moviesDataSource: MoviesHomeViewModel = MoviesHomeViewModel()
-    
     @State var showingProfile = false
     @State var showHambergerMenu: Bool = false
     @State var showMore: Bool = false
@@ -84,7 +82,7 @@ struct MovieHomeView: View {
     var body: some View {
         LoadingView(isShowing: .constant((moviesDataSource.movieCategories.count < 4))) {
             VStack {
-                ScrollView(showsIndicators: false) {
+                List {
                     ForEach(self.moviesDataSource.movieCategories) { category in
                         MovieCategoryCell(category: category.name, movies: category.movies, showMore: self.$showMore)
                     }
@@ -100,12 +98,10 @@ struct TVHomeView: View {
     @Binding var showMore: Bool
     
     var body: some View {
-        LoadingView(isShowing: .constant((tvDataSource.tvCategories.count < 4))) {
-            VStack {
-                ScrollView(showsIndicators: false) {
-                    ForEach(self.tvDataSource.tvCategories) { category in
-                        MovieCategoryCell(category: category.name, movies: category.movies, showMore: self.$showMore)
-                    }
+        VStack {
+            List {
+                ForEach(self.tvDataSource.tvCategories) { category in
+                    MovieCategoryCell(category: category.name, movies: category.movies, showMore: self.$showMore)
                 }
             }
         }
@@ -157,7 +153,7 @@ struct MovieCategoryCell: View {
             }
             .frame(height: 280)
         }
-        .padding(.horizontal, 20)
+        .padding(.horizontal, 0)
     }
 }
 
