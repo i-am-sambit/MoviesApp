@@ -19,6 +19,5 @@ class TheatreViewModel: ObservableObject {
 //    let objectWillChange: ObservableObjectPublisher = ObservableObjectPublisher()
     
     @Published var selectedSeats: [Int] = []
-    
     @Published var reservedSeats: [Int] = []
 }

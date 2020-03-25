@@ -25,13 +25,19 @@ class MoviesHomeViewModel: ObservableObject {
     
     var movieCategories: [Categories] = [] {
         didSet {
-            self.movieCategories.sort { $0.id < $1.id }
+            if !shouldShowActivityIndicator {
+                self.movieCategories.sort { $0.id < $1.id }
+                self.objectWillChange.send()
+            }
         }
     }
     
     var tvCategories: [Categories] = [] {
         didSet {
-            self.tvCategories.sort { $0.id < $1.id }
+            if !shouldShowActivityIndicator {
+                self.tvCategories.sort { $0.id < $1.id }
+                self.objectWillChange.send()
+            }
         }
     }
     
@@ -55,7 +61,6 @@ class MoviesHomeViewModel: ObservableObject {
                 case .success(let response):
                     let popularMovies = response.results
                     self.movieCategories.append(Categories(id: 1, name: "Popular", movies: popularMovies))
-                    self.objectWillChange.send()
                     break
                 case .failure(let error):
                     print("Unable to fetch movies : \(error.localizedDescription)")
@@ -73,8 +78,6 @@ class MoviesHomeViewModel: ObservableObject {
                 case .success(let response):
                     let nowPlayingMovies = response.results
                     self.movieCategories.append(Categories(id: 0, name: "Now Playing", movies: nowPlayingMovies))
-                    
-                    self.objectWillChange.send()
                     break
                 case .failure(let error):
                     print("Unable to fetch movies : \(error.localizedDescription)")
@@ -92,7 +95,6 @@ class MoviesHomeViewModel: ObservableObject {
                 case .success(let response):
                     let upcomingMovies = response.results
                     self.movieCategories.append(Categories(id: 2, name: "Upcoming", movies: upcomingMovies))
-                    self.objectWillChange.send()
                     break
                 case .failure(let error):
                     print("Unable to fetch movies : \(error.localizedDescription)")
@@ -110,7 +112,6 @@ class MoviesHomeViewModel: ObservableObject {
                 case .success(let response):
                     let topRatedMovies = response.results
                     self.movieCategories.append(Categories(id: 3, name: "Top Rated", movies: topRatedMovies))
-                    self.objectWillChange.send()
                     break
                 case .failure(let error):
                     print("Unable to fetch movies : \(error.localizedDescription)")
@@ -128,7 +129,6 @@ class MoviesHomeViewModel: ObservableObject {
                 case .success(let response):
                     let tvAiringToday = response.results
                     self.tvCategories.append(Categories(id: 0, name: "Airing Today", movies: tvAiringToday))
-                    self.objectWillChange.send()
                     break
                 case .failure(_):
                     break
@@ -145,7 +145,6 @@ class MoviesHomeViewModel: ObservableObject {
                 case .success(let response):
                     let tvOnAir = response.results
                     self.tvCategories.append(Categories(id: 1, name: "On Air", movies: tvOnAir))
-                    self.objectWillChange.send()
                     break
                 case .failure(_):
                     break
@@ -162,7 +161,6 @@ class MoviesHomeViewModel: ObservableObject {
                 case .success(let response):
                     let tvPopular = response.results
                     self.tvCategories.append(Categories(id: 2, name: "Popular", movies: tvPopular))
-                    self.objectWillChange.send()
                     break
                 case .failure(_):
                     break
@@ -179,7 +177,6 @@ class MoviesHomeViewModel: ObservableObject {
                 case .success(let response):
                     let tvTopRated = response.results
                     self.tvCategories.append(Categories(id: 3, name: "Top Rated", movies: tvTopRated))
-                    self.objectWillChange.send()
                     break
                 case .failure(_):
                     break

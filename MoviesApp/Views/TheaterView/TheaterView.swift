@@ -9,7 +9,7 @@
 import SwiftUI
 
 struct TheaterView: View {
-    @State var viewModel: TheaterViewModel = TheaterViewModel()
+    @ObservedObject var viewModel: TheatreViewModel = TheatreViewModel()
     
     var body: some View {
         List() {
@@ -24,11 +24,12 @@ struct TheaterView: View {
                     .frame(height: 150)
                     .foregroundColor(Color.accentColor)
             }
-            SeatView(viewModel: $viewModel)
+            SeatView(viewModel: viewModel)
             MovieShowDateView(selectedIndex: 3)
             MovieShowTimeView(selectedIndex: 2)
             Button(action: {
-                
+                print("Selected Seats")
+                print(self.viewModel.selectedSeats)
             }) {
                 Text("Continue")
             }
@@ -41,8 +42,7 @@ struct TheaterView: View {
 }
 
 struct SeatView: View {
-    @Binding var viewModel: TheaterViewModel
-    @State var selectedSeats: [Int] = []
+    @ObservedObject var viewModel: TheatreViewModel
     
     var body: some View {
         VStack(spacing: 25) {
@@ -51,14 +51,14 @@ struct SeatView: View {
                     ForEach(0..<10, id: \.self) { col in
                         HStack{
                             ForEach(0..<14, id: \.self){ row in
-                                ChairView(availableState: (self.selectedSeats.contains((col * 10) + row)) ? .selected : .available).onTapGesture {
+                                ChairView(availableState: (self.viewModel.selectedSeats.contains((col * 10) + row)) ? .selected : .available).onTapGesture {
                                     let seatNumber = ((col * 10) + row)
-                                    if self.selectedSeats.contains(seatNumber) {
-                                        if let index: Int = self.selectedSeats.firstIndex(of: seatNumber) {
-                                            self.selectedSeats.remove(at: index)
+                                    if self.viewModel.selectedSeats.contains(seatNumber) {
+                                        if let index: Int = self.viewModel.selectedSeats.firstIndex(of: seatNumber) {
+                                            self.viewModel.selectedSeats.remove(at: index)
                                         }
                                     } else {
-                                        self.selectedSeats.append(seatNumber)
+                                        self.viewModel.selectedSeats.append(seatNumber)
                                     }
                                 }
                             }
