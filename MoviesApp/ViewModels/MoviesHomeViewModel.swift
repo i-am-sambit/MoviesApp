@@ -18,20 +18,22 @@ struct Categories: Identifiable {
 
 class MoviesHomeViewModel: ObservableObject {
     let objectWillChange: ObservableObjectPublisher = ObservableObjectPublisher()
+    
+    var shouldShowActivityIndicator: Bool {
+        return movieCategories.count < 4
+    }
+    
     var movieCategories: [Categories] = [] {
         didSet {
-            self.movieCategories.sort { (first, second) -> Bool in
-                first.id < second.id
-            }
+            self.movieCategories.sort { $0.id < $1.id }
         }
     }
+    
     var tvCategories: [Categories] = [] {
-           didSet {
-               self.tvCategories.sort { (first, second) -> Bool in
-                   first.id < second.id
-               }
-           }
-       }
+        didSet {
+            self.tvCategories.sort { $0.id < $1.id }
+        }
+    }
     
     init() {
         fetchPopularMovies()
@@ -52,10 +54,11 @@ class MoviesHomeViewModel: ObservableObject {
                     
                 case .success(let response):
                     let popularMovies = response.results
-                    self.movieCategories.append(Categories(id: 0, name: "Popular", movies: popularMovies))
+                    self.movieCategories.append(Categories(id: 1, name: "Popular", movies: popularMovies))
                     self.objectWillChange.send()
                     break
-                case .failure(_):
+                case .failure(let error):
+                    print("Unable to fetch movies : \(error.localizedDescription)")
                     break
                 }
             }
@@ -69,11 +72,12 @@ class MoviesHomeViewModel: ObservableObject {
                     
                 case .success(let response):
                     let nowPlayingMovies = response.results
-                    self.movieCategories.append(Categories(id: 1, name: "Now Playing", movies: nowPlayingMovies))
+                    self.movieCategories.append(Categories(id: 0, name: "Now Playing", movies: nowPlayingMovies))
                     
                     self.objectWillChange.send()
                     break
-                case .failure(_):
+                case .failure(let error):
+                    print("Unable to fetch movies : \(error.localizedDescription)")
                     break
                 }
             }
@@ -90,7 +94,8 @@ class MoviesHomeViewModel: ObservableObject {
                     self.movieCategories.append(Categories(id: 2, name: "Upcoming", movies: upcomingMovies))
                     self.objectWillChange.send()
                     break
-                case .failure(_):
+                case .failure(let error):
+                    print("Unable to fetch movies : \(error.localizedDescription)")
                     break
                 }
             }
@@ -107,7 +112,8 @@ class MoviesHomeViewModel: ObservableObject {
                     self.movieCategories.append(Categories(id: 3, name: "Top Rated", movies: topRatedMovies))
                     self.objectWillChange.send()
                     break
-                case .failure(_):
+                case .failure(let error):
+                    print("Unable to fetch movies : \(error.localizedDescription)")
                     break
                 }
             }

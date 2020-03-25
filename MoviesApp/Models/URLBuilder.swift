@@ -38,17 +38,11 @@ class URLBuilder {
         return self
     }
     
-    func set(query: String) -> URLBuilder {
-//        self.components.port = port
-        return self
-    }
-    
-    func set(opertion: String) -> URLBuilder {
-//        self.components.port = port
-        return self
-    }
-    
-    @discardableResult func build() -> URL? {
-        return self.components.url
+    @discardableResult func build() throws -> URL {
+        guard let url = self.components.url else {
+            throw MDBErrorManager.badURL
+        }
+        
+        return url
     }
 }

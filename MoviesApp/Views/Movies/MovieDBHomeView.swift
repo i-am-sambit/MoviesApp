@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-struct ContentView: View {
+struct MovieDBHomeView: View {
     init() {
         UITableView.appearance().tableFooterView = UIView()
         UITableView.appearance().separatorStyle = .none
@@ -19,35 +19,8 @@ struct ContentView: View {
     @State var showMore: Bool = false
     @State var isLoading: Bool = false
     
-    var hambergerMenuButton: some View {
-        Button(action: {
-            withAnimation {
-                self.showHambergerMenu.toggle()
-            }
-            
-        }) {
-            Image(systemName: self.showHambergerMenu ? "chevron.left" : "line.horizontal.3")
-                .imageScale(.large)
-                .accessibility(label: Text("Hamberger Menu"))
-                .padding()
-                .foregroundColor(.primary)
-        }
-    }
-    
     var body: some View {
-        NavigationView {
-            ZStack(alignment: .leading) {
-                HomeView(showHambergerMenu: self.$showHambergerMenu, showMore: self.$showMore)
-                
-                if self.showHambergerMenu {
-                    HumbergerMenu()
-                        .frame(width: UIScreen.main.bounds.width)
-                        .transition(.offset(x: (-UIScreen.main.bounds.width)))
-                }
-            }
-            .navigationBarTitle("Movies App", displayMode: .inline)
-            .navigationBarItems(leading: self.hambergerMenuButton)
-        }
+        HomeView(showHambergerMenu: self.$showHambergerMenu, showMore: self.$showMore)
     }
 }
 
@@ -58,14 +31,18 @@ struct HomeView: View {
     var body: some View {
         VStack {
             TabView {
-                MovieHomeView(showMore: $showMore)
-                .tabItem {
+                NavigationView {
+                    MovieHomeView(showMore: $showMore)
+                        .navigationBarTitle("Movies", displayMode: .automatic)
+                }.tabItem {
                     Text("Movies")
                     Image(systemName: "film")
                 }
                 
-                TVHomeView(showMore: $showMore)
-                .tabItem {
+                NavigationView {
+                    TVHomeView(showMore: $showMore)
+                        .navigationBarTitle("TV Series", displayMode: .automatic)
+                }.tabItem {
                     Text("TV Series")
                     Image(systemName: "tv")
                 }
@@ -80,13 +57,12 @@ struct MovieHomeView: View {
     @Binding var showMore: Bool
     
     var body: some View {
-        LoadingView(isShowing: .constant((moviesDataSource.movieCategories.count < 4))) {
-            VStack {
-                List {
-                    ForEach(self.moviesDataSource.movieCategories) { category in
-                        MovieCategoryCell(category: category.name, movies: category.movies, showMore: self.$showMore)
-                    }
-                }
+        List {
+            ForEach(self.moviesDataSource.movieCategories) { category in
+                MovieCategoryCell(category: category.name,
+                                  movies: category.movies,
+                                  showMore: self.$showMore)
+                
             }
         }
     }
@@ -130,30 +106,53 @@ struct MovieCategoryCell: View {
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack {
                     ForEach(self.movies, id: \.id) { movie in
-                        NavigationLink(destination: MovieUIView(movie: movie)) {
+                        NavigationLink(destination: MovieDetailsView(movie: movie)) {
                             MovieCard(movie: movie)
-                                .contextMenu {
-                                    Button(action: {
-                                        // change country setting
-                                    }) {
-                                        Text("Choose Country")
-                                        Image(systemName: "globe")
-                                    }
-
-                                    Button(action: {
-                                        // enable geolocation
-                                    }) {
-                                        Text("Detect Location")
-                                        Image(systemName: "location.circle")
-                                    }
-                            }
+                            //                                .contextMenu {
+                            //                                    Button(action: {
+                            //                                        // change country setting
+                            //                                    }) {
+                            //                                        Text("Watch Trailer")
+                            //                                        Image(systemName: "globe")
+                            //                                    }
+                            //
+                            //                                    Button(action: {
+                            //                                        // enable geolocation
+                            //                                    }) {
+                            //                                        Text("Detect Location")
+                            //                                        Image(systemName: "location.circle")
+                            //                                    }
+                            //                            }
                         }
                     }
                 }
+                .frame(height: 280)
             }
-            .frame(height: 280)
         }
         .padding(.horizontal, 0)
+    }
+}
+
+struct TrendingMovieCard: View {
+    var movie: MovieBaseProtocol
+    
+    var body: some View {
+        GeometryReader { geometryReader in
+            ZStack() {
+                URLImageView(urlString: self.movie.poster)
+                    .frame(width: geometryReader.size.width - 20, height: 300)
+                    .aspectRatio(contentMode: .fill)
+                    .clipped()
+                    .cornerRadius(10)
+                
+                //            Text(movie.name)
+                //                .font(.headline)
+                //                .foregroundColor(.primary)
+                //                .lineLimit(1)
+            }
+        }
+        .frame(width: 500, height: 300)
+        .padding(.trailing)
     }
 }
 
@@ -186,6 +185,6 @@ struct MovieCard: View {
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        ContentView()
+        MovieDBHomeView()
     }
 }

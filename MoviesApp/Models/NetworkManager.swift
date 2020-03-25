@@ -8,14 +8,14 @@
 
 import UIKit
 
-class NetworkManager<Response: Decodable>: NSObject {
-    typealias ServiceResult = ((Result<Response, Error>) -> Void)
-    
+class NetworkManager: NSObject, URLSessionDelegate, URLSessionTaskDelegate {
     private var url: URL
     private var request: Encodable?
     private var requestType: RequestType
     
-    init(url: URL, request: Encodable? = nil, type: RequestType) {
+    private let imageCache: NSCache = NSCache<NSURL, NSData>()
+    
+    init(url: URL, request: Encodable? = nil, type: RequestType = .get) {
         self.url         = url
         self.request     = request
         self.requestType = type
@@ -28,12 +28,18 @@ class NetworkManager<Response: Decodable>: NSObject {
         case delete     = "DELETE"
     }
     
-    private let sessionConfig: URLSessionConfiguration = {
-        let sessionConfiguration = URLSessionConfiguration.default
-        sessionConfiguration.timeoutIntervalForRequest = 300.0
-        sessionConfiguration.timeoutIntervalForResource = 300.0
-        return sessionConfiguration
-    }()
+    private var defaultSessionConfig: URLSessionConfiguration {
+        let config = URLSessionConfiguration.default
+        config.timeoutIntervalForRequest = 300.0
+        config.timeoutIntervalForResource = 300.0
+        config.allowsCellularAccess = true
+        return config
+    }
+    
+    private var downloadSessionConfig: URLSessionConfiguration {
+        let config = URLSessionConfiguration.background(withIdentifier: "")
+        return config
+    }
     
     
     /// getURLRequest
@@ -56,11 +62,11 @@ class NetworkManager<Response: Decodable>: NSObject {
     ///
     /// - Parameters:
     ///   - onResult: onResult callback
-    public func request(onResult: @escaping ServiceResult) {
+    public func request<Response: Decodable>(onResult: @escaping((Result<Response, Error>) -> Void)) {
         
         do {
             
-            let session = URLSession(configuration: sessionConfig)
+            let session = URLSession(configuration: defaultSessionConfig)
             session.dataTask(with: try getURLRequest()) { (data, urlResponse, error) in
                 if let error = error {
                     onResult(.failure(error))
@@ -88,6 +94,77 @@ class NetworkManager<Response: Decodable>: NSObject {
             onResult(.failure(error))
             
         }
+    }
+    
+    public func downloadImage(completionHandler: @escaping((Result<Data, Error>) -> Void)) {
+        if let cachedData: Data = imageCache.object(forKey: self.url as NSURL) as Data? {
+            completionHandler(.success(cachedData))
+        }
+        
+        URLSession.shared.dataTask(with: url) { (data, httpResponse, error) in
+            if let error = error {
+                completionHandler(.failure(error))
+            }
+            
+            if let data = data {
+                if let url: NSURL = httpResponse?.url as NSURL? {
+                    self.imageCache.setObject(data as NSData, forKey: url)
+                }
+                completionHandler(.success(data))
+            } else {
+                
+            }
+        }.resume()
+    }
+    
+    func upload() {
+        let session = URLSession(configuration: defaultSessionConfig,
+                                 delegate: self,
+                                 delegateQueue: .main)
+        
+    }
+    
+    func urlSession(_ session: URLSession, didReceive challenge: URLAuthenticationChallenge, completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> Void) {
+        
+    }
+    
+    func urlSession(_ session: URLSession, didBecomeInvalidWithError error: Error?) {
+        
+    }
+    
+    func urlSessionDidFinishEvents(forBackgroundURLSession session: URLSession) {
+        
+    }
+    
+    func urlSession(_ session: URLSession, taskIsWaitingForConnectivity task: URLSessionTask) {
+        
+    }
+    
+    func urlSession(_ session: URLSession, task: URLSessionTask, didCompleteWithError error: Error?) {
+        
+    }
+    
+    func urlSession(_ session: URLSession, task: URLSessionTask, didFinishCollecting metrics: URLSessionTaskMetrics) {
+        
+    }
+    
+    func urlSession(_ session: URLSession, task: URLSessionTask, needNewBodyStream completionHandler: @escaping (InputStream?) -> Void) {
+        
+    }
+    
+    func urlSession(_ session: URLSession, task: URLSessionTask, willBeginDelayedRequest request: URLRequest, completionHandler: @escaping (URLSession.DelayedRequestDisposition, URLRequest?) -> Void) {
+        
+    }
+    
+    func urlSession(_ session: URLSession, task: URLSessionTask, didSendBodyData bytesSent: Int64, totalBytesSent: Int64, totalBytesExpectedToSend: Int64) {
+        
+    }
+    
+    func urlSession(_ session: URLSession, task: URLSessionTask, didReceive challenge: URLAuthenticationChallenge, completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> Void) {
+        
+    }
+    
+    func urlSession(_ session: URLSession, task: URLSessionTask, willPerformHTTPRedirection response: HTTPURLResponse, newRequest request: URLRequest, completionHandler: @escaping (URLRequest?) -> Void) {
         
     }
 }

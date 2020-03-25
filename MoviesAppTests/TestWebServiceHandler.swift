@@ -22,7 +22,7 @@ class TestWebServiceHandler: XCTestCase {
 
     func testFetchPopularMovies() {
         let popularMoviesExpectation = XCTestExpectation(description: "Download apple.com home page")
-        webServiceHandler?.fetchPopularMovies(complitionHandler: { (result) in
+        webServiceHandler?.fetchPopularMovies(completionHandler: { (result) in
             switch result {
                 
             case .success(let response):
