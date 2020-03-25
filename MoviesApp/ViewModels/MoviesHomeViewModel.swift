@@ -54,7 +54,7 @@ class MoviesHomeViewModel: ObservableObject {
     }
     
     private func fetchPopularMovies() {
-        WebServiceHandler().fetchPopularMovies { (result) in
+        WebServiceHandler.shared.fetchPopularMovies { (result) in
             DispatchQueue.main.async {
                 switch result {
                     
@@ -71,7 +71,7 @@ class MoviesHomeViewModel: ObservableObject {
     }
     
     private func fetchNowPlayingMovies() {
-        WebServiceHandler().fetchNowPlayingMovies { (result) in
+        WebServiceHandler.shared.fetchNowPlayingMovies { (result) in
             DispatchQueue.main.async {
                 switch result {
                     
@@ -88,7 +88,7 @@ class MoviesHomeViewModel: ObservableObject {
     }
     
     private func fetchUpcomingMovies() {
-        WebServiceHandler().fetchUpcomingMovies { (result) in
+        WebServiceHandler.shared.fetchUpcomingMovies { (result) in
             DispatchQueue.main.async {
                 switch result {
                     
@@ -105,7 +105,7 @@ class MoviesHomeViewModel: ObservableObject {
     }
     
     private func fetchTopRatedMovies() {
-        WebServiceHandler().fetchTopRatedMovies { (result) in
+        WebServiceHandler.shared.fetchTopRatedMovies { (result) in
             DispatchQueue.main.async {
                 switch result {
                     
@@ -122,7 +122,7 @@ class MoviesHomeViewModel: ObservableObject {
     }
     
     private func fetchTvTodaysAiring() {
-        WebServiceHandler().fetchTvTodaysAiring { (result) in
+        WebServiceHandler.shared.fetchTvTodaysAiring { (result) in
             DispatchQueue.main.async {
                 switch result {
                     
@@ -138,7 +138,7 @@ class MoviesHomeViewModel: ObservableObject {
     }
     
     private func fetchTvOnTheAir() {
-        WebServiceHandler().fetchTvOnTheAir { (result) in
+        WebServiceHandler.shared.fetchTvOnTheAir { (result) in
             DispatchQueue.main.async {
                 switch result {
                     
@@ -154,7 +154,7 @@ class MoviesHomeViewModel: ObservableObject {
     }
     
     private func fetchTvPopular() {
-        WebServiceHandler().fetchTvPopular { (result) in
+        WebServiceHandler.shared.fetchTvPopular { (result) in
             DispatchQueue.main.async {
                 switch result {
                     
@@ -170,7 +170,7 @@ class MoviesHomeViewModel: ObservableObject {
     }
     
     private func fetchTvTopRated() {
-        WebServiceHandler().fetchTvTopRated { (result) in
+        WebServiceHandler.shared.fetchTvTopRated { (result) in
             DispatchQueue.main.async {
                 switch result {
                     

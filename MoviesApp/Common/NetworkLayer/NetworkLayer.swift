@@ -8,24 +8,17 @@
 
 import UIKit
 
-class NetworkManager: NSObject, URLSessionDelegate, URLSessionTaskDelegate {
+class NetworkLayer: NSObject {
     private var url: URL
     private var request: Encodable?
-    private var requestType: RequestType
+    private var requestType: String
     
     private let imageCache: NSCache = NSCache<NSURL, NSData>()
     
-    init(url: URL, request: Encodable? = nil, type: RequestType = .get) {
+    init(url: URL, request: Encodable? = nil, type: String) {
         self.url         = url
         self.request     = request
         self.requestType = type
-    }
-    
-    enum RequestType: String {
-        case get        = "GET"
-        case post       = "POST"
-        case put        = "PUT"
-        case delete     = "DELETE"
     }
     
     private var defaultSessionConfig: URLSessionConfiguration {
@@ -48,7 +41,7 @@ class NetworkManager: NSObject, URLSessionDelegate, URLSessionTaskDelegate {
     /// - Throws: error while enoding request
     private func getURLRequest() throws -> URLRequest {
         var urlRequest = URLRequest(url: url)
-        urlRequest.httpMethod = self.requestType.rawValue
+        urlRequest.httpMethod = self.requestType
         
         if let request = request {
             urlRequest.httpBody = try request.convertToData()
@@ -117,12 +110,10 @@ class NetworkManager: NSObject, URLSessionDelegate, URLSessionTaskDelegate {
         }.resume()
     }
     
-    func upload() {
-        let session = URLSession(configuration: defaultSessionConfig,
-                                 delegate: self,
-                                 delegateQueue: .main)
-        
-    }
+    
+}
+
+extension NetworkLayer: URLSessionDelegate, URLSessionTaskDelegate {
     
     func urlSession(_ session: URLSession, didReceive challenge: URLAuthenticationChallenge, completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> Void) {
         

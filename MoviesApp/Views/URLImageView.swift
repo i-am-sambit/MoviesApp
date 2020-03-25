@@ -36,9 +36,7 @@ struct URLImageView: View {
                     self.imageLoader.loadImageData(urlString: self.urlString)
                 }
         }
-        
     }
-    
 }
 
 struct ImageView_Previews: PreviewProvider {
@@ -52,6 +50,18 @@ class ImageLoader: ObservableObject {
     var objectWillChange: ObservableObjectPublisher = ObservableObjectPublisher()
     
     func loadImageData(urlString: String) {
+        WebServiceHandler.shared.setImage(urlString: urlString) { (result) in
+            DispatchQueue.main.async {
+                switch result {
+                    
+                case .success(let data):
+                    self.image = UIImage(data: data)
+                    self.objectWillChange.send()
+                case .failure(_):
+                    break
+                }
+            }
+        }
         if let url: URL = URL(string: "https://image.tmdb.org/t/p/w300_and_h300_bestv2\(urlString)") {
             URLSession.shared.dataTask(with: url) { (data, response, error) in
                 

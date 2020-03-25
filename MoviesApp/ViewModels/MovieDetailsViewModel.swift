@@ -21,7 +21,7 @@ class MovieDetailsViewModel: ObservableObject {
     }
     
     private func fetchVideos(forMovie movieID: Int) {
-        WebServiceHandler().fetchTrailerVideos(movie: movieID) { (result) in
+        WebServiceHandler.shared.fetchTrailerVideos(movie: movieID) { (result) in
             DispatchQueue.main.async {
                 switch result {
                     
