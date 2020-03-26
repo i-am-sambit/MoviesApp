@@ -16,7 +16,7 @@ class URLBuilder {
         static let kDatabaseVersion = "/3"
         static let kMovie           = "/movie"
         static let kTV              = "/tv"
-        static let kImagePath       = "t/p/w300_and_h300_bestv2"
+        static let kImagePath       = "/t/p/w300_and_h300_bestv2"
     }
     
     enum MediaType {
@@ -82,7 +82,7 @@ class URLBuilder {
     
     func buildImageURL() throws -> URL {
         self.components.scheme = WebServiceConstats.kScheme
-        self.components.host = WebServiceConstats.kHost
+        self.components.host = WebServiceConstats.kImageHost
         self.components.path = WebServiceConstats.kImagePath + self.posterPath
         
         guard let url = self.components.url else {

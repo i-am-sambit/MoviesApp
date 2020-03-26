@@ -35,8 +35,8 @@ class NetworkManager {
     public func downloadImage(url: URL, completionHandler: @escaping((Result<Data, Error>) -> Void)) {
         networkLayer = NetworkLayer(url: url, type: RequestType.get.rawValue)
         
-        downloadQueue.addOperation {
+//        downloadQueue.addOperation {
             self.networkLayer?.downloadImage(completionHandler: completionHandler)
-        }
+//        }
     }
 }
