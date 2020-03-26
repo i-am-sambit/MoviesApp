@@ -8,18 +8,23 @@
 
 import Foundation
 
-struct WebServiceHandler {
+final class WebServiceHandler {
+    static let shared = WebServiceHandler()
+    private let networkManager = NetworkManager()
+    
+    private init() { }
+    
     func fetchPopularMovies(page: Int = 1, completionHandler:@escaping(Result<MoviesResponse, Error>)-> Void) {
         do {
-            let url = try URLBuilder(scheme: WebServiceConstats.kScheme, host: WebServiceConstats.kHost)
-            .set(path: WebServiceConstats.kDatabaseVersion
-                + WebServiceConstats.kMovie
-                + OperationNameConstants.kPopular)
-            .addQueryItem(name: QueryConstants.Keys.kAPIKey, value: QueryConstants.Values.kAPIKey)
-            .addQueryItem(name: QueryConstants.Keys.kLanguage, value: QueryConstants.Values.kLanguage)
-            .addQueryItem(name: QueryConstants.Keys.kPage, value: page)
-            .build()
-            NetworkManager(url: url, type: .get).request(onResult: completionHandler)
+            let url = try URLBuilder()
+                .set(media: .movie)
+                .set(operation: .popular)
+                .addQueryItem(name: QueryConstants.Keys.kAPIKey, value: QueryConstants.Values.kAPIKey)
+                .addQueryItem(name: QueryConstants.Keys.kLanguage, value: QueryConstants.Values.kLanguage)
+                .addQueryItem(name: QueryConstants.Keys.kPage, value: page)
+                .build()
+            
+            networkManager.make(url: url, requestType: .get, completionHandler: completionHandler)
         } catch let error {
             completionHandler(.failure(error))
         }
@@ -27,15 +32,14 @@ struct WebServiceHandler {
     
     func fetchNowPlayingMovies(page: Int = 1, completionHandler:@escaping(Result<MoviesResponse, Error>)-> Void) {
         do {
-            let url = try URLBuilder(scheme: WebServiceConstats.kScheme, host: WebServiceConstats.kHost)
-                .set(path: WebServiceConstats.kDatabaseVersion
-                    + WebServiceConstats.kMovie
-                    + OperationNameConstants.kNowPlaying)
+            let url = try URLBuilder()
+                .set(media: .movie)
+                .set(operation: .nowPlaying)
                 .addQueryItem(name: QueryConstants.Keys.kAPIKey, value: QueryConstants.Values.kAPIKey)
                 .addQueryItem(name: QueryConstants.Keys.kLanguage, value: QueryConstants.Values.kLanguage)
                 .addQueryItem(name: QueryConstants.Keys.kPage, value: page)
                 .build()
-            NetworkManager(url: url, type: .get).request(onResult: completionHandler)
+            networkManager.make(url: url, requestType: .get, completionHandler: completionHandler)
         } catch let error {
             completionHandler(.failure(error))
         }
@@ -43,14 +47,15 @@ struct WebServiceHandler {
     
     func fetchUpcomingMovies(page: Int = 1,completionHandler:@escaping(Result<MoviesResponse, Error>)-> Void) {
         do {
-            let url = try URLBuilder(scheme: WebServiceConstats.kScheme, host: WebServiceConstats.kHost)
-                .set(path: WebServiceConstats.kDatabaseVersion + WebServiceConstats.kMovie + OperationNameConstants.kUpcoming)
+            let url = try URLBuilder()
+                .set(media: .movie)
+                .set(operation: .upcoming)
                 .addQueryItem(name: QueryConstants.Keys.kAPIKey, value: QueryConstants.Values.kAPIKey)
                 .addQueryItem(name: QueryConstants.Keys.kLanguage, value: QueryConstants.Values.kLanguage)
                 .addQueryItem(name: QueryConstants.Keys.kPage, value: page)
                 .build()
             
-            NetworkManager(url: url, type: .get).request(onResult: completionHandler)
+            networkManager.make(url: url, requestType: .get, completionHandler: completionHandler)
         } catch let error {
             completionHandler(.failure(error))
         }
@@ -58,14 +63,15 @@ struct WebServiceHandler {
     
     func fetchTopRatedMovies(page: Int = 1, completionHandler:@escaping(Result<MoviesResponse, Error>)-> Void) {
         do {
-            let url = try URLBuilder(scheme: WebServiceConstats.kScheme, host: WebServiceConstats.kHost)
-                .set(path: WebServiceConstats.kDatabaseVersion + WebServiceConstats.kMovie + OperationNameConstants.kTopRated)
+            let url = try URLBuilder()
+                .set(media: .movie)
+                .set(operation: .topRated)
                 .addQueryItem(name: QueryConstants.Keys.kAPIKey, value: QueryConstants.Values.kAPIKey)
                 .addQueryItem(name: QueryConstants.Keys.kLanguage, value: QueryConstants.Values.kLanguage)
                 .addQueryItem(name: QueryConstants.Keys.kPage, value: page)
                 .build()
             
-            NetworkManager(url: url, type: .get).request(onResult: completionHandler)
+            networkManager.make(url: url, requestType: .get, completionHandler: completionHandler)
         } catch let error {
             completionHandler(.failure(error))
         }
@@ -73,13 +79,15 @@ struct WebServiceHandler {
     
     func fetchTrailerVideos(movie movieID: Int, completionHandler:@escaping(Result<MovieVideoResponse, Error>)-> Void) {
         do {
-            let url = try URLBuilder(scheme: WebServiceConstats.kScheme, host: WebServiceConstats.kHost)
-                .set(path: "\(movieID)" + WebServiceConstats.kVideos)
+            let url = try URLBuilder()
+                .set(media: .movie)
+                .set(media: "\(movieID)")
+                .set(operation: .videos)
                 .addQueryItem(name: QueryConstants.Keys.kAPIKey, value: QueryConstants.Values.kAPIKey)
                 .addQueryItem(name: QueryConstants.Keys.kLanguage, value: QueryConstants.Values.kLanguage)
                 .build()
             
-            NetworkManager(url: url, type: .get).request(onResult: completionHandler)
+            networkManager.make(url: url, requestType: .get, completionHandler: completionHandler)
         } catch let error {
             completionHandler(.failure(error))
         }
@@ -87,14 +95,15 @@ struct WebServiceHandler {
     
     func fetchTvTodaysAiring(page: Int = 1, completionHandler:@escaping(Result<TVResponse, Error>)-> Void) {
         do {
-            let url = try URLBuilder(scheme: WebServiceConstats.kScheme, host: WebServiceConstats.kHost)
-                .set(path: WebServiceConstats.kDatabaseVersion + WebServiceConstats.kTV + OperationNameConstants.kAiringToday)
+            let url = try URLBuilder()
+                .set(media: .tvSeries)
+                .set(operation: .airingToday)
                 .addQueryItem(name: QueryConstants.Keys.kAPIKey, value: QueryConstants.Values.kAPIKey)
                 .addQueryItem(name: QueryConstants.Keys.kLanguage, value: QueryConstants.Values.kLanguage)
                 .addQueryItem(name: QueryConstants.Keys.kPage, value: page)
                 .build()
             
-            NetworkManager(url: url, type: .get).request(onResult: completionHandler)
+            networkManager.make(url: url, requestType: .get, completionHandler: completionHandler)
         } catch let error {
             completionHandler(.failure(error))
         }
@@ -102,14 +111,15 @@ struct WebServiceHandler {
     
     func fetchTvOnTheAir(page: Int = 1, completionHandler:@escaping(Result<TVResponse, Error>)-> Void) {
         do {
-            let url = try URLBuilder(scheme: WebServiceConstats.kScheme, host: WebServiceConstats.kHost)
-                .set(path: WebServiceConstats.kDatabaseVersion + WebServiceConstats.kTV + OperationNameConstants.kOnAir)
+            let url = try URLBuilder()
+                .set(media: .tvSeries)
+                .set(operation: .onAir)
                 .addQueryItem(name: QueryConstants.Keys.kAPIKey, value: QueryConstants.Values.kAPIKey)
                 .addQueryItem(name: QueryConstants.Keys.kLanguage, value: QueryConstants.Values.kLanguage)
                 .addQueryItem(name: QueryConstants.Keys.kPage, value: page)
                 .build()
             
-            NetworkManager(url: url, type: .get).request(onResult: completionHandler)
+            networkManager.make(url: url, requestType: .get, completionHandler: completionHandler)
         } catch let error {
             completionHandler(.failure(error))
         }
@@ -117,14 +127,15 @@ struct WebServiceHandler {
     
     func fetchTvPopular(page: Int = 1, completionHandler:@escaping(Result<TVResponse, Error>)-> Void) {
         do {
-            let url = try URLBuilder(scheme: WebServiceConstats.kScheme, host: WebServiceConstats.kHost)
-                .set(path: WebServiceConstats.kDatabaseVersion + WebServiceConstats.kTV + OperationNameConstants.kPopular)
+            let url = try URLBuilder()
+                .set(media: .tvSeries)
+                .set(operation: .popular)
                 .addQueryItem(name: QueryConstants.Keys.kAPIKey, value: QueryConstants.Values.kAPIKey)
                 .addQueryItem(name: QueryConstants.Keys.kLanguage, value: QueryConstants.Values.kLanguage)
                 .addQueryItem(name: QueryConstants.Keys.kPage, value: page)
                 .build()
             
-            NetworkManager(url: url, type: .get).request(onResult: completionHandler)
+            networkManager.make(url: url, requestType: .get, completionHandler: completionHandler)
         } catch let error {
             completionHandler(.failure(error))
         }
@@ -132,14 +143,15 @@ struct WebServiceHandler {
     
     func fetchTvTopRated(page: Int = 1, completionHandler:@escaping(Result<TVResponse, Error>)-> Void) {
         do {
-            let url = try URLBuilder(scheme: WebServiceConstats.kScheme, host: WebServiceConstats.kHost)
-                .set(path: WebServiceConstats.kDatabaseVersion + WebServiceConstats.kTV + OperationNameConstants.kTopRated)
+            let url = try URLBuilder()
+                .set(media: .tvSeries)
+                .set(operation: .topRated)
                 .addQueryItem(name: QueryConstants.Keys.kAPIKey, value: QueryConstants.Values.kAPIKey)
                 .addQueryItem(name: QueryConstants.Keys.kLanguage, value: QueryConstants.Values.kLanguage)
                 .addQueryItem(name: QueryConstants.Keys.kPage, value: page)
                 .build()
             
-            NetworkManager(url: url, type: .get).request(onResult: completionHandler)
+            networkManager.make(url: url, requestType: .get, completionHandler: completionHandler)
         } catch let error {
             completionHandler(.failure(error))
         }
@@ -151,11 +163,11 @@ struct WebServiceHandler {
 extension WebServiceHandler {
     func setImage(urlString: String, completionHandler: @escaping(Result<Data, Error>)-> Void) {
         do {
-            let url = try URLBuilder(scheme: WebServiceConstats.kScheme, host: "image.tmdb.org")
-                .set(path: "t/p/w300_and_h300_bestv2" + urlString)
-                .build()
+            let url = try URLBuilder()
+                .set(poster: urlString)
+                .buildImageURL()
             
-            NetworkManager(url: url).downloadImage(completionHandler: completionHandler)
+            networkManager.downloadImage(url: url, completionHandler: completionHandler)
         } catch let error {
             completionHandler(.failure(error))
         }
