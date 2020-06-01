@@ -8,34 +8,29 @@
 
 import SwiftUI
 import Combine
+import KingfisherSwiftUI
 
 struct URLImageView: View {
     var urlString: String
     var placeHolderImage: Image
-    
+    private var url: URL
     @ObservedObject private var imageLoader: ImageLoader
     
     init(urlString: String, placeHolder: Image = Image("avengers")) {
         self.urlString = urlString
         self.placeHolderImage = placeHolder
         self.imageLoader = ImageLoader()
+        
+        url = try! URLBuilder()
+            .set(poster: urlString)
+            .buildImageURL()
+        
     }
     
     var body: some View {
-        if let uiImage = imageLoader.image {
-            let image = Image(uiImage: uiImage)
-            return image
-                .renderingMode(.original)
-                .resizable()
-                .onAppear()
-        } else {
-            return placeHolderImage
-                .renderingMode(.original)
-                .resizable()
-                .onAppear {
-                    self.imageLoader.loadImageData(urlString: self.urlString)
-                }
-        }
+        KFImage(source: .network(url))
+            .renderingMode(.original)
+            .resizable()
     }
 }
 

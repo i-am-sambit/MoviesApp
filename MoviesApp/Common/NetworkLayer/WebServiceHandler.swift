@@ -14,10 +14,24 @@ final class WebServiceHandler {
     
     private init() { }
     
+    func fetchTrendingMovies(page: Int = 1, completionHandler:@escaping(Result<MoviesResponse, Error>)-> Void) {
+        do {
+            let url = try URLBuilder()
+                .set(operation: .trending(timeWindow: .day))
+                .addQueryItem(name: QueryConstants.Keys.kAPIKey, value: QueryConstants.Values.kAPIKey)
+                .addQueryItem(name: QueryConstants.Keys.kLanguage, value: QueryConstants.Values.kLanguage)
+                .addQueryItem(name: QueryConstants.Keys.kPage, value: page)
+                .build()
+            
+            networkManager.make(url: url, requestType: .get, completionHandler: completionHandler)
+        } catch let error {
+            completionHandler(.failure(error))
+        }
+    }
+    
     func fetchPopularMovies(page: Int = 1, completionHandler:@escaping(Result<MoviesResponse, Error>)-> Void) {
         do {
             let url = try URLBuilder()
-                .set(media: .movie)
                 .set(operation: .popular)
                 .addQueryItem(name: QueryConstants.Keys.kAPIKey, value: QueryConstants.Values.kAPIKey)
                 .addQueryItem(name: QueryConstants.Keys.kLanguage, value: QueryConstants.Values.kLanguage)
@@ -33,7 +47,6 @@ final class WebServiceHandler {
     func fetchNowPlayingMovies(page: Int = 1, completionHandler:@escaping(Result<MoviesResponse, Error>)-> Void) {
         do {
             let url = try URLBuilder()
-                .set(media: .movie)
                 .set(operation: .nowPlaying)
                 .addQueryItem(name: QueryConstants.Keys.kAPIKey, value: QueryConstants.Values.kAPIKey)
                 .addQueryItem(name: QueryConstants.Keys.kLanguage, value: QueryConstants.Values.kLanguage)
@@ -48,7 +61,6 @@ final class WebServiceHandler {
     func fetchUpcomingMovies(page: Int = 1,completionHandler:@escaping(Result<MoviesResponse, Error>)-> Void) {
         do {
             let url = try URLBuilder()
-                .set(media: .movie)
                 .set(operation: .upcoming)
                 .addQueryItem(name: QueryConstants.Keys.kAPIKey, value: QueryConstants.Values.kAPIKey)
                 .addQueryItem(name: QueryConstants.Keys.kLanguage, value: QueryConstants.Values.kLanguage)
@@ -64,7 +76,6 @@ final class WebServiceHandler {
     func fetchTopRatedMovies(page: Int = 1, completionHandler:@escaping(Result<MoviesResponse, Error>)-> Void) {
         do {
             let url = try URLBuilder()
-                .set(media: .movie)
                 .set(operation: .topRated)
                 .addQueryItem(name: QueryConstants.Keys.kAPIKey, value: QueryConstants.Values.kAPIKey)
                 .addQueryItem(name: QueryConstants.Keys.kLanguage, value: QueryConstants.Values.kLanguage)
@@ -77,85 +88,85 @@ final class WebServiceHandler {
         }
     }
     
-    func fetchTrailerVideos(movie movieID: Int, completionHandler:@escaping(Result<MovieVideoResponse, Error>)-> Void) {
-        do {
-            let url = try URLBuilder()
-                .set(media: .movie)
-                .set(media: "\(movieID)")
-                .set(operation: .videos)
-                .addQueryItem(name: QueryConstants.Keys.kAPIKey, value: QueryConstants.Values.kAPIKey)
-                .addQueryItem(name: QueryConstants.Keys.kLanguage, value: QueryConstants.Values.kLanguage)
-                .build()
-            
-            networkManager.make(url: url, requestType: .get, completionHandler: completionHandler)
-        } catch let error {
-            completionHandler(.failure(error))
-        }
-    }
-    
-    func fetchTvTodaysAiring(page: Int = 1, completionHandler:@escaping(Result<TVResponse, Error>)-> Void) {
-        do {
-            let url = try URLBuilder()
-                .set(media: .tvSeries)
-                .set(operation: .airingToday)
-                .addQueryItem(name: QueryConstants.Keys.kAPIKey, value: QueryConstants.Values.kAPIKey)
-                .addQueryItem(name: QueryConstants.Keys.kLanguage, value: QueryConstants.Values.kLanguage)
-                .addQueryItem(name: QueryConstants.Keys.kPage, value: page)
-                .build()
-            
-            networkManager.make(url: url, requestType: .get, completionHandler: completionHandler)
-        } catch let error {
-            completionHandler(.failure(error))
-        }
-    }
-    
-    func fetchTvOnTheAir(page: Int = 1, completionHandler:@escaping(Result<TVResponse, Error>)-> Void) {
-        do {
-            let url = try URLBuilder()
-                .set(media: .tvSeries)
-                .set(operation: .onAir)
-                .addQueryItem(name: QueryConstants.Keys.kAPIKey, value: QueryConstants.Values.kAPIKey)
-                .addQueryItem(name: QueryConstants.Keys.kLanguage, value: QueryConstants.Values.kLanguage)
-                .addQueryItem(name: QueryConstants.Keys.kPage, value: page)
-                .build()
-            
-            networkManager.make(url: url, requestType: .get, completionHandler: completionHandler)
-        } catch let error {
-            completionHandler(.failure(error))
-        }
-    }
-    
-    func fetchTvPopular(page: Int = 1, completionHandler:@escaping(Result<TVResponse, Error>)-> Void) {
-        do {
-            let url = try URLBuilder()
-                .set(media: .tvSeries)
-                .set(operation: .popular)
-                .addQueryItem(name: QueryConstants.Keys.kAPIKey, value: QueryConstants.Values.kAPIKey)
-                .addQueryItem(name: QueryConstants.Keys.kLanguage, value: QueryConstants.Values.kLanguage)
-                .addQueryItem(name: QueryConstants.Keys.kPage, value: page)
-                .build()
-            
-            networkManager.make(url: url, requestType: .get, completionHandler: completionHandler)
-        } catch let error {
-            completionHandler(.failure(error))
-        }
-    }
-    
-    func fetchTvTopRated(page: Int = 1, completionHandler:@escaping(Result<TVResponse, Error>)-> Void) {
-        do {
-            let url = try URLBuilder()
-                .set(media: .tvSeries)
-                .set(operation: .topRated)
-                .addQueryItem(name: QueryConstants.Keys.kAPIKey, value: QueryConstants.Values.kAPIKey)
-                .addQueryItem(name: QueryConstants.Keys.kLanguage, value: QueryConstants.Values.kLanguage)
-                .addQueryItem(name: QueryConstants.Keys.kPage, value: page)
-                .build()
-            
-            networkManager.make(url: url, requestType: .get, completionHandler: completionHandler)
-        } catch let error {
-            completionHandler(.failure(error))
-        }
-    }
+//    func fetchTrailerVideos(movie movieID: Int, completionHandler:@escaping(Result<MovieVideoResponse, Error>)-> Void) {
+//        do {
+//            let url = try URLBuilder()
+//                .set(media: .movie)
+//                .set(media: "\(movieID)")
+//                .set(operation: .videos)
+//                .addQueryItem(name: QueryConstants.Keys.kAPIKey, value: QueryConstants.Values.kAPIKey)
+//                .addQueryItem(name: QueryConstants.Keys.kLanguage, value: QueryConstants.Values.kLanguage)
+//                .build()
+//            
+//            networkManager.make(url: url, requestType: .get, completionHandler: completionHandler)
+//        } catch let error {
+//            completionHandler(.failure(error))
+//        }
+//    }
+//    
+//    func fetchTvTodaysAiring(page: Int = 1, completionHandler:@escaping(Result<TVResponse, Error>)-> Void) {
+//        do {
+//            let url = try URLBuilder()
+//                .set(media: .tvSeries)
+//                .set(operation: .airingToday)
+//                .addQueryItem(name: QueryConstants.Keys.kAPIKey, value: QueryConstants.Values.kAPIKey)
+//                .addQueryItem(name: QueryConstants.Keys.kLanguage, value: QueryConstants.Values.kLanguage)
+//                .addQueryItem(name: QueryConstants.Keys.kPage, value: page)
+//                .build()
+//            
+//            networkManager.make(url: url, requestType: .get, completionHandler: completionHandler)
+//        } catch let error {
+//            completionHandler(.failure(error))
+//        }
+//    }
+//    
+//    func fetchTvOnTheAir(page: Int = 1, completionHandler:@escaping(Result<TVResponse, Error>)-> Void) {
+//        do {
+//            let url = try URLBuilder()
+//                .set(media: .tvSeries)
+//                .set(operation: .onAir)
+//                .addQueryItem(name: QueryConstants.Keys.kAPIKey, value: QueryConstants.Values.kAPIKey)
+//                .addQueryItem(name: QueryConstants.Keys.kLanguage, value: QueryConstants.Values.kLanguage)
+//                .addQueryItem(name: QueryConstants.Keys.kPage, value: page)
+//                .build()
+//            
+//            networkManager.make(url: url, requestType: .get, completionHandler: completionHandler)
+//        } catch let error {
+//            completionHandler(.failure(error))
+//        }
+//    }
+//    
+//    func fetchTvPopular(page: Int = 1, completionHandler:@escaping(Result<TVResponse, Error>)-> Void) {
+//        do {
+//            let url = try URLBuilder()
+//                .set(media: .tvSeries)
+//                .set(operation: .popular)
+//                .addQueryItem(name: QueryConstants.Keys.kAPIKey, value: QueryConstants.Values.kAPIKey)
+//                .addQueryItem(name: QueryConstants.Keys.kLanguage, value: QueryConstants.Values.kLanguage)
+//                .addQueryItem(name: QueryConstants.Keys.kPage, value: page)
+//                .build()
+//            
+//            networkManager.make(url: url, requestType: .get, completionHandler: completionHandler)
+//        } catch let error {
+//            completionHandler(.failure(error))
+//        }
+//    }
+//    
+//    func fetchTvTopRated(page: Int = 1, completionHandler:@escaping(Result<TVResponse, Error>)-> Void) {
+//        do {
+//            let url = try URLBuilder()
+//                .set(media: .tvSeries)
+//                .set(operation: .topRated)
+//                .addQueryItem(name: QueryConstants.Keys.kAPIKey, value: QueryConstants.Values.kAPIKey)
+//                .addQueryItem(name: QueryConstants.Keys.kLanguage, value: QueryConstants.Values.kLanguage)
+//                .addQueryItem(name: QueryConstants.Keys.kPage, value: page)
+//                .build()
+//            
+//            networkManager.make(url: url, requestType: .get, completionHandler: completionHandler)
+//        } catch let error {
+//            completionHandler(.failure(error))
+//        }
+//    }
     
     
 }

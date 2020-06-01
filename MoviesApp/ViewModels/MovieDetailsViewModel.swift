@@ -21,18 +21,18 @@ class MovieDetailsViewModel: ObservableObject {
     }
     
     private func fetchVideos(forMovie movieID: Int) {
-        WebServiceHandler.shared.fetchTrailerVideos(movie: movieID) { (result) in
-            DispatchQueue.main.async {
-                switch result {
-                    
-                case .success(let response):
-                    self.videos = response.results
-                    self.objectWillChange.send()
-                    
-                case .failure(_):
-                    break
-                }
-            }
-        }
+//        WebServiceHandler.shared.fetchTrailerVideos(movie: movieID) { (result) in
+//            DispatchQueue.main.async {
+//                switch result {
+//                    
+//                case .success(let response):
+//                    self.videos = response.results
+//                    self.objectWillChange.send()
+//                    
+//                case .failure(_):
+//                    break
+//                }
+//            }
+//        }
     }
 }

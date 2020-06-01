@@ -19,34 +19,24 @@ class URLBuilder {
         static let kImagePath       = "/t/p/w300_and_h300_bestv2"
     }
     
-    enum MediaType {
-        case movie
-        case tvSeries
-    }
-    
-    enum ServiceOperation: String {
-        case nowPlaying     = "/now_playing"
-        case popular        = "/popular"
-        case upcoming       = "/upcoming"
-        case topRated       = "/top_rated"
-        case airingToday    = "/airing_today"
-        case onAir          = "/on_the_air"
-        case videos         = "/videos"
-    }
+//    enum MediaType {
+//        case movie
+//        case tvSeries
+//    }
     
     private lazy var components: URLComponents = URLComponents()
-    private lazy var mediaPath:  String = ""
+//    private lazy var mediaPath:  String = ""
     private lazy var operation:  String = ""
     private lazy var mediaId:    String = ""
     private lazy var posterPath: String = ""
     
-    func set(media mediaType: MediaType) -> URLBuilder {
-        self.mediaPath = mediaType == .movie ? WebServiceConstats.kMovie : WebServiceConstats.kTV
-        return self
-    }
+//    func set(media mediaType: MediaType) -> URLBuilder {
+//        self.mediaPath = mediaType == .movie ? WebServiceConstats.kMovie : WebServiceConstats.kTV
+//        return self
+//    }
     
     func set(operation: ServiceOperation) -> URLBuilder {
-        self.operation = operation.rawValue
+        self.operation = operation.value
         return self
     }
     
@@ -71,7 +61,7 @@ class URLBuilder {
     func build() throws -> URL {
         self.components.scheme = WebServiceConstats.kScheme
         self.components.host = WebServiceConstats.kHost
-        self.components.path = WebServiceConstats.kDatabaseVersion + self.mediaPath + self.operation
+        self.components.path = WebServiceConstats.kDatabaseVersion + self.operation
         
         guard let url = self.components.url else {
             throw MDBErrorManager.badURL
@@ -90,5 +80,43 @@ class URLBuilder {
         }
         
         return url
+    }
+}
+
+extension URLBuilder {
+    enum ServiceOperation {
+        case trending(timeWindow: Trending)
+        case nowPlaying
+        case popular
+        case upcoming
+        case topRated
+        
+        var value: String {
+            switch self {
+                
+            case .trending(timeWindow: let timeWindow):
+                switch timeWindow {
+                
+                case .day:
+                    return "/trending/movie/day"
+                case .week:
+                    return "/trending/movie/week"
+                }
+            case .nowPlaying:
+                return "/movie/now_playing"
+            case .popular:
+                return "/movie/popular"
+            case .upcoming:
+                return "/movie/upcoming"
+            case .topRated:
+                return "/movie/top_rated"
+            }
+        }
+        
+    }
+    
+    enum Trending: String {
+        case day    = "/day"
+        case week   = "/week"
     }
 }
