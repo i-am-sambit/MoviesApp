@@ -44,7 +44,7 @@ class ImageLoader: ObservableObject {
     @Published var image: UIImage?
     
     func loadImageData(urlString: String) {
-        WebServiceHandler.shared.setImage(urlString: urlString) { (result) in
+        WebServiceHandler().setImage(urlString: urlString) { (result) in
             DispatchQueue.main.async {
                 switch result {
                     

@@ -2,41 +2,101 @@
 //  NetworkManager.swift
 //  MoviesApp
 //
-//  Created by SAMBIT DASH on 25/03/20.
-//  Copyright © 2020 MoviesApp. All rights reserved.
+//  Created by SAMBIT DASH on 25/10/19.
+//  Copyright © 2019 SAMBIT DASH. All rights reserved.
 //
 
 import Foundation
+import Combine
 
-class NetworkManager {
-    enum RequestType: String {
+class NetworkManager<Response: Decodable>: NSObject {
+    enum RequestMethod: String {
         case get        = "GET"
         case post       = "POST"
         case put        = "PUT"
         case delete     = "DELETE"
     }
     
-    private var networkLayer: NetworkLayer?
+    private var url: URL
+    private var request: Encodable?
+    private var method: RequestMethod
     
-    var downloadQueue: OperationQueue = OperationQueue()
+    private let imageCache: NSCache = NSCache<NSURL, NSData>()
     
-    init() {
-        downloadQueue.maxConcurrentOperationCount = 10
+    init(url: URL, request: Encodable? = nil, method: RequestMethod) {
+        self.url         = url
+        self.request     = request
+        self.method = method
     }
     
-    public func make<Response: Decodable>(request: Encodable? = nil,
-                                          url: URL,
-                                          requestType: RequestType = .get,
-                                          completionHandler: @escaping((Result<Response, Error>) -> Void)) {
-        networkLayer = NetworkLayer(url: url, request: request, type: requestType.rawValue)
-        self.networkLayer?.request(onResult: completionHandler)
+    private var defaultSessionConfig: URLSessionConfiguration {
+        let config = URLSessionConfiguration.default
+        config.timeoutIntervalForRequest = 300.0
+        config.timeoutIntervalForResource = 300.0
+        config.allowsCellularAccess = true
+        return config
     }
     
-    public func downloadImage(url: URL, completionHandler: @escaping((Result<Data, Error>) -> Void)) {
-        networkLayer = NetworkLayer(url: url, type: RequestType.get.rawValue)
+    private var downloadSessionConfig: URLSessionConfiguration {
+        let config = URLSessionConfiguration.background(withIdentifier: "")
+        return config
+    }
+    
+    
+    /// getURLRequest
+    ///
+    /// - Returns: URLRequest instance
+    /// - Throws: error while enoding request
+    private func getURLRequest() throws -> URLRequest {
+        var urlRequest = URLRequest(url: url)
+        urlRequest.httpMethod = self.method.rawValue
         
-//        downloadQueue.addOperation {
-            self.networkLayer?.downloadImage(completionHandler: completionHandler)
-//        }
+        if let request = request {
+            urlRequest.httpBody = try request.convertToData()
+        }
+        
+        return urlRequest
+    }
+    
+    
+    /// Request
+    ///
+    /// - Parameters:
+    ///   - onResult: onResult callback
+    public func makeRequest() throws -> AnyPublisher<Response, Error> {
+        let session = URLSession(configuration: defaultSessionConfig)
+        return session.dataTaskPublisher(for: try getURLRequest())
+            .map { $0.data }
+            .decode(type: Response.self, decoder: JSONDecoder())
+            .eraseToAnyPublisher()
+    }
+    
+    public func downloadImage(completionHandler: @escaping((Result<Data, Error>) -> Void)) {
+        if let cachedData: Data = imageCache.object(forKey: self.url as NSURL) as Data? {
+            completionHandler(.success(cachedData))
+        }
+        
+        URLSession.shared.dataTask(with: url) { (data, httpResponse, error) in
+            if let error = error {
+                completionHandler(.failure(error))
+            }
+            
+            if let data = data {
+                if let url: NSURL = httpResponse?.url as NSURL? {
+                    self.imageCache.setObject(data as NSData, forKey: url)
+                }
+                completionHandler(.success(data))
+            } else {
+                
+            }
+        }.resume()
+    }
+    
+    
+}
+
+fileprivate extension Encodable {
+    func convertToData() throws -> Data {
+        return try JSONEncoder().encode(self)
     }
 }

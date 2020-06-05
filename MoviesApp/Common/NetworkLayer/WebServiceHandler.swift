@@ -7,85 +7,73 @@
 //
 
 import Foundation
+import Combine
 
 final class WebServiceHandler {
-    static let shared = WebServiceHandler()
-    private let networkManager = NetworkManager()
-    
-    private init() { }
-    
-    func fetchTrendingMovies(page: Int = 1, completionHandler:@escaping(Result<MoviesResponse, Error>)-> Void) {
-        do {
-            let url = try URLBuilder()
-                .set(operation: .trending(timeWindow: .day))
-                .addQueryItem(name: QueryConstants.Keys.kAPIKey, value: QueryConstants.Values.kAPIKey)
-                .addQueryItem(name: QueryConstants.Keys.kLanguage, value: QueryConstants.Values.kLanguage)
-                .addQueryItem(name: QueryConstants.Keys.kPage, value: page)
-                .build()
-            
-            networkManager.make(url: url, requestType: .get, completionHandler: completionHandler)
-        } catch let error {
-            completionHandler(.failure(error))
-        }
+    func fetchTrendingMovies(page: Int = 1) throws -> AnyPublisher<MoviesResponse, Error> {
+        let url = try URLBuilder()
+            .set(operation: .trending(timeWindow: .day))
+            .addQueryItem(name: QueryConstants.Keys.kAPIKey, value: QueryConstants.Values.kAPIKey)
+            .addQueryItem(name: QueryConstants.Keys.kLanguage, value: QueryConstants.Values.kLanguage)
+            .addQueryItem(name: QueryConstants.Keys.kPage, value: page)
+            .build()
+        
+        return try NetworkManager<MoviesResponse>(url: url, method: .get).makeRequest()
+            .catch { (error) in Fail<MoviesResponse, Error>(error: error) }
+            .eraseToAnyPublisher()
     }
     
-    func fetchPopularMovies(page: Int = 1, completionHandler:@escaping(Result<MoviesResponse, Error>)-> Void) {
-        do {
-            let url = try URLBuilder()
-                .set(operation: .popular)
-                .addQueryItem(name: QueryConstants.Keys.kAPIKey, value: QueryConstants.Values.kAPIKey)
-                .addQueryItem(name: QueryConstants.Keys.kLanguage, value: QueryConstants.Values.kLanguage)
-                .addQueryItem(name: QueryConstants.Keys.kPage, value: page)
-                .build()
-            
-            networkManager.make(url: url, requestType: .get, completionHandler: completionHandler)
-        } catch let error {
-            completionHandler(.failure(error))
-        }
+    func fetchPopularMovies(page: Int = 1) throws -> AnyPublisher<MoviesResponse, Error> {
+        let url = try URLBuilder()
+            .set(operation: .popular)
+            .addQueryItem(name: QueryConstants.Keys.kAPIKey, value: QueryConstants.Values.kAPIKey)
+            .addQueryItem(name: QueryConstants.Keys.kLanguage, value: QueryConstants.Values.kLanguage)
+            .addQueryItem(name: QueryConstants.Keys.kPage, value: page)
+            .build()
+        
+        return try NetworkManager<MoviesResponse>(url: url, method: .get).makeRequest()
+            .catch { (error) in Fail<MoviesResponse, Error>(error: error) }
+            .eraseToAnyPublisher()
     }
     
-    func fetchNowPlayingMovies(page: Int = 1, completionHandler:@escaping(Result<MoviesResponse, Error>)-> Void) {
-        do {
-            let url = try URLBuilder()
-                .set(operation: .nowPlaying)
-                .addQueryItem(name: QueryConstants.Keys.kAPIKey, value: QueryConstants.Values.kAPIKey)
-                .addQueryItem(name: QueryConstants.Keys.kLanguage, value: QueryConstants.Values.kLanguage)
-                .addQueryItem(name: QueryConstants.Keys.kPage, value: page)
-                .build()
-            networkManager.make(url: url, requestType: .get, completionHandler: completionHandler)
-        } catch let error {
-            completionHandler(.failure(error))
-        }
+    func fetchNowPlayingMovies(page: Int = 1) throws -> AnyPublisher<MoviesResponse, Error> {
+        let url = try URLBuilder()
+            .set(operation: .nowPlaying)
+            .addQueryItem(name: QueryConstants.Keys.kAPIKey, value: QueryConstants.Values.kAPIKey)
+            .addQueryItem(name: QueryConstants.Keys.kLanguage, value: QueryConstants.Values.kLanguage)
+            .addQueryItem(name: QueryConstants.Keys.kPage, value: page)
+            .build()
+        
+        return try NetworkManager<MoviesResponse>(url: url, method: .get).makeRequest()
+            .catch { (error) in Fail<MoviesResponse, Error>(error: error) }
+            .eraseToAnyPublisher()
     }
     
-    func fetchUpcomingMovies(page: Int = 1,completionHandler:@escaping(Result<MoviesResponse, Error>)-> Void) {
-        do {
-            let url = try URLBuilder()
-                .set(operation: .upcoming)
-                .addQueryItem(name: QueryConstants.Keys.kAPIKey, value: QueryConstants.Values.kAPIKey)
-                .addQueryItem(name: QueryConstants.Keys.kLanguage, value: QueryConstants.Values.kLanguage)
-                .addQueryItem(name: QueryConstants.Keys.kPage, value: page)
-                .build()
-            
-            networkManager.make(url: url, requestType: .get, completionHandler: completionHandler)
-        } catch let error {
-            completionHandler(.failure(error))
-        }
+    func fetchUpcomingMovies(page: Int = 1) throws -> AnyPublisher<MoviesResponse, Error> {
+        
+        let url = try URLBuilder()
+            .set(operation: .upcoming)
+            .addQueryItem(name: QueryConstants.Keys.kAPIKey, value: QueryConstants.Values.kAPIKey)
+            .addQueryItem(name: QueryConstants.Keys.kLanguage, value: QueryConstants.Values.kLanguage)
+            .addQueryItem(name: QueryConstants.Keys.kPage, value: page)
+            .build()
+        
+        return try NetworkManager<MoviesResponse>(url: url, method: .get).makeRequest()
+            .catch { (error) in Fail<MoviesResponse, Error>(error: error) }
+            .eraseToAnyPublisher()
     }
     
-    func fetchTopRatedMovies(page: Int = 1, completionHandler:@escaping(Result<MoviesResponse, Error>)-> Void) {
-        do {
-            let url = try URLBuilder()
-                .set(operation: .topRated)
-                .addQueryItem(name: QueryConstants.Keys.kAPIKey, value: QueryConstants.Values.kAPIKey)
-                .addQueryItem(name: QueryConstants.Keys.kLanguage, value: QueryConstants.Values.kLanguage)
-                .addQueryItem(name: QueryConstants.Keys.kPage, value: page)
-                .build()
-            
-            networkManager.make(url: url, requestType: .get, completionHandler: completionHandler)
-        } catch let error {
-            completionHandler(.failure(error))
-        }
+    func fetchTopRatedMovies(page: Int = 1) throws -> AnyPublisher<MoviesResponse, Error> {
+        let url = try URLBuilder()
+            .set(operation: .topRated)
+            .addQueryItem(name: QueryConstants.Keys.kAPIKey, value: QueryConstants.Values.kAPIKey)
+            .addQueryItem(name: QueryConstants.Keys.kLanguage, value: QueryConstants.Values.kLanguage)
+            .addQueryItem(name: QueryConstants.Keys.kPage, value: page)
+            .build()
+        
+        return try NetworkManager<MoviesResponse>(url: url, method: .get).makeRequest()
+            .catch { (error) in Fail<MoviesResponse, Error>(error: error) }
+            .eraseToAnyPublisher()
     }
     
 //    func fetchTrailerVideos(movie movieID: Int, completionHandler:@escaping(Result<MovieVideoResponse, Error>)-> Void) {
@@ -178,7 +166,7 @@ extension WebServiceHandler {
                 .set(poster: urlString)
                 .buildImageURL()
             
-            networkManager.downloadImage(url: url, completionHandler: completionHandler)
+//            NetworkManager().downloadImage(url: url, completionHandler: completionHandler)
         } catch let error {
             completionHandler(.failure(error))
         }

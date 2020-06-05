@@ -17,6 +17,11 @@ struct Category: Identifiable {
 
 class MoviesHomeViewModel: ObservableObject {
     let objectWillChange: ObservableObjectPublisher = ObservableObjectPublisher()
+    var trendingSubscription: AnyCancellable?
+    var popularSubscription: AnyCancellable?
+    var nowPlayingSubscription: AnyCancellable?
+    var upcomingSubscription: AnyCancellable?
+    var topRatedSubscription: AnyCancellable?
     
     var shouldShowActivityIndicator: Bool {
         return categories.count < 4
@@ -40,157 +45,101 @@ class MoviesHomeViewModel: ObservableObject {
     
     
     private func fetchTrendingMovies() {
-        WebServiceHandler.shared.fetchTrendingMovies { (result) in
-            DispatchQueue.main.async {
-                switch result {
+        do {
+            self.trendingSubscription = try WebServiceHandler().fetchTrendingMovies()
+                .receive(on: RunLoop.main)
+                .sink(receiveCompletion: { completionHandler in
                     
-                case .success(let response):
+                }, receiveValue: { (response) in
                     self.categories.append(Category(id: CategoryId.trending.rawValue,
-                                                      name: CategoryTitle.trending.rawValue,
-                                                      movies: response.results))
-                    break
-                case .failure(let error):
-                    print("Unable to fetch movies : \(error.localizedDescription)")
-                    break
-                }
-            }
+                                                    name: CategoryTitle.trending.rawValue,
+                                                    movies: response.results))
+                })
+            
+        } catch let error {
+            print(error.localizedDescription)
         }
     }
     
     private func fetchPopularMovies() {
-        WebServiceHandler.shared.fetchPopularMovies { (result) in
-            DispatchQueue.main.async {
-                switch result {
+        do {
+            self.popularSubscription = try WebServiceHandler().fetchPopularMovies()
+                .receive(on: RunLoop.main)
+                .sink(receiveCompletion: { completionHandler in
                     
-                case .success(let response):
+                }, receiveValue: { (response) in
                     self.categories.append(Category(id: CategoryId.popular.rawValue,
-                                                      name: CategoryTitle.popular.rawValue,
-                                                      movies: response.results))
-                    break
-                case .failure(let error):
-                    print("Unable to fetch movies : \(error.localizedDescription)")
-                    break
-                }
-            }
+                                                    name: CategoryTitle.popular.rawValue,
+                                                    movies: response.results))
+                })
+            
+        } catch let error {
+            print(error.localizedDescription)
         }
     }
     
     private func fetchNowPlayingMovies() {
-        WebServiceHandler.shared.fetchNowPlayingMovies { (result) in
-            DispatchQueue.main.async {
-                switch result {
+        do {
+            self.nowPlayingSubscription = try WebServiceHandler().fetchNowPlayingMovies()
+                .receive(on: RunLoop.main)
+                .sink(receiveCompletion: { completionHandler in
                     
-                case .success(let response):
+                }, receiveValue: { (response) in
                     self.categories.append(Category(id: CategoryId.nowPlaying.rawValue,
-                                                      name: CategoryTitle.nowPlaying.rawValue,
-                                                      movies: response.results))
-                    break
-                case .failure(let error):
-                    print("Unable to fetch movies : \(error.localizedDescription)")
-                    break
-                }
-            }
+                                                    name: CategoryTitle.nowPlaying.rawValue,
+                                                    movies: response.results))
+                })
+            
+        } catch let error {
+            print(error.localizedDescription)
         }
     }
     
     private func fetchUpcomingMovies() {
-        WebServiceHandler.shared.fetchUpcomingMovies { (result) in
-            DispatchQueue.main.async {
-                switch result {
+        do {
+            self.upcomingSubscription = try WebServiceHandler().fetchUpcomingMovies()
+                .receive(on: RunLoop.main)
+                .sink(receiveCompletion: { completionHandler in
                     
-                case .success(let response):
+                }, receiveValue: { (response) in
                     self.categories.append(Category(id: CategoryId.upcoming.rawValue,
-                                                      name: CategoryTitle.upcoming.rawValue,
-                                                      movies: response.results))
-                    break
-                case .failure(let error):
-                    print("Unable to fetch movies : \(error.localizedDescription)")
-                    break
-                }
-            }
+                                                    name: CategoryTitle.upcoming.rawValue,
+                                                    movies: response.results))
+                })
+            
+        } catch let error {
+            print(error.localizedDescription)
         }
     }
     
+    //MARK: - Fetch top rated movies
     private func fetchTopRatedMovies() {
-        WebServiceHandler.shared.fetchTopRatedMovies { (result) in
-            DispatchQueue.main.async {
-                switch result {
+        do {
+            self.topRatedSubscription = try WebServiceHandler().fetchTopRatedMovies()
+                .receive(on: RunLoop.main)
+                .sink(receiveCompletion: { completionHandler in
                     
-                case .success(let response):
+                }, receiveValue: { (response) in
                     self.categories.append(Category(id: CategoryId.topRated.rawValue,
-                                                      name: CategoryTitle.topRated.rawValue,
-                                                      movies: response.results))
-                    break
-                case .failure(let error):
-                    print("Unable to fetch movies : \(error.localizedDescription)")
-                    break
-                }
-            }
+                                                    name: CategoryTitle.topRated.rawValue,
+                                                    movies: response.results))
+                })
+            
+        } catch let error {
+            print(error.localizedDescription)
         }
     }
     
     private func fetchTvTodaysAiring() {
-//        WebServiceHandler.shared.fetchTvTodaysAiring { (result) in
-//            DispatchQueue.main.async {
-//                switch result {
-//
-//                case .success(let response):
-//                    let tvAiringToday = response.results
-//                    self.categories.append(Categories(id: 0, name: "Airing Today", movies: tvAiringToday))
-//                    break
-//                case .failure(_):
-//                    break
-//                }
-//            }
-//        }
     }
     
     private func fetchTvOnTheAir() {
-//        WebServiceHandler.shared.fetchTvOnTheAir { (result) in
-//            DispatchQueue.main.async {
-//                switch result {
-//
-//                case .success(let response):
-//                    let tvOnAir = response.results
-//                    self.categories.append(Categories(id: 1, name: "On Air", movies: tvOnAir))
-//                    break
-//                case .failure(_):
-//                    break
-//                }
-//            }
-//        }
     }
     
     private func fetchTvPopular() {
-//        WebServiceHandler.shared.fetchTvPopular { (result) in
-//            DispatchQueue.main.async {
-//                switch result {
-//
-//                case .success(let response):
-//                    let tvPopular = response.results
-//                    self.categories.append(Categories(id: 2, name: "Popular", movies: tvPopular))
-//                    break
-//                case .failure(_):
-//                    break
-//                }
-//            }
-//        }
     }
     
     private func fetchTvTopRated() {
-//        WebServiceHandler.shared.fetchTvTopRated { (result) in
-//            DispatchQueue.main.async {
-//                switch result {
-//                    
-//                case .success(let response):
-//                    let tvTopRated = response.results
-//                    self.categories.append(Categories(id: 3, name: "Top Rated", movies: tvTopRated))
-//                    break
-//                case .failure(_):
-//                    break
-//                }
-//            }
-//        }
     }
     
 }
