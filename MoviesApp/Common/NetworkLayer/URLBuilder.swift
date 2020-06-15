@@ -19,29 +19,13 @@ class URLBuilder {
         static let kImagePath       = "/t/p/w300_and_h300_bestv2"
     }
     
-//    enum MediaType {
-//        case movie
-//        case tvSeries
-//    }
-    
     private lazy var components: URLComponents = URLComponents()
-//    private lazy var mediaPath:  String = ""
     private lazy var operation:  String = ""
     private lazy var mediaId:    String = ""
     private lazy var posterPath: String = ""
     
-//    func set(media mediaType: MediaType) -> URLBuilder {
-//        self.mediaPath = mediaType == .movie ? WebServiceConstats.kMovie : WebServiceConstats.kTV
-//        return self
-//    }
-    
     func set(operation: ServiceOperation) -> URLBuilder {
         self.operation = operation.value
-        return self
-    }
-    
-    func set(media mediaId: String) -> URLBuilder {
-        self.mediaId = mediaId
         return self
     }
     
@@ -90,6 +74,8 @@ extension URLBuilder {
         case popular
         case upcoming
         case topRated
+        case details(media: Media, movieId: String)
+        case credits(media: Media, movieId: String)
         
         var value: String {
             switch self {
@@ -110,6 +96,23 @@ extension URLBuilder {
                 return "/movie/upcoming"
             case .topRated:
                 return "/movie/top_rated"
+            case .details(media: let media, movieId: let mediaId):
+                switch media {
+                    
+                case .movie:
+                    return "/movie/\(mediaId)"
+                case .tv:
+                    return "/tv/\(mediaId)"
+                }
+                
+            case .credits(media: let media, movieId: let mediaId):
+                switch media {
+                    
+                case .movie:
+                    return "/movie/\(mediaId)/credits"
+                case .tv:
+                    return "/tv/\(mediaId)/credits"
+                }
             }
         }
         
@@ -118,5 +121,10 @@ extension URLBuilder {
     enum Trending: String {
         case day    = "/day"
         case week   = "/week"
+    }
+    
+    enum Media {
+        case movie
+        case tv
     }
 }
