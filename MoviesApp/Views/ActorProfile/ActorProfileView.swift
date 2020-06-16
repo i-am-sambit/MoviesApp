@@ -20,8 +20,7 @@ struct ActorProfileView: View {
             if viewModel.castDetails != nil {
                 VStack {
                     URLImageView(urlString: viewModel.castDetails!.person.profilePath)
-                        .frame(width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.width * (5/4))
-//                        .padding(.top, -10)
+                        .frame(width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.width)
                     
                     VStack(alignment: .leading) {
                         Text(viewModel.castDetails!.person.name)
@@ -47,7 +46,7 @@ struct ActorProfileView: View {
                     }
                     .frame(maxWidth: .infinity)
                     .padding(.vertical)
-                    .background(Color.secondaryBackgroundColor)
+                    .background(Color.backgroundColor)
                     .cornerRadius(radius: 40, corners: [.topLeft, .topRight])
                     .padding(.top, -50)
                 }
@@ -55,7 +54,7 @@ struct ActorProfileView: View {
                 EmptyView()
             }
         }
-        .background(Color.secondaryBackgroundColor)
+        .background(Color.backgroundColor)
         .edgesIgnoringSafeArea(.vertical)
         .onAppear {
             self.viewModel.fetchCreditDetails()
@@ -72,6 +71,10 @@ struct ActorProfileView_Previews: PreviewProvider {
                 .environment(\.colorScheme, .dark)
             
             ActorProfileView(cast: cast)
+                .environment(\.colorScheme, .light)
+            
+            ActorProfileView(cast: cast)
+                .previewDevice(.init(rawValue: "iPad Pro (9.7-inch)"))
                 .environment(\.colorScheme, .light)
         }
     }
