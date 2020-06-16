@@ -100,6 +100,28 @@ final class WebServiceHandler {
             .eraseToAnyPublisher()
     }
     
+    func fetchSimilar(movies id: Int) throws -> AnyPublisher<MoviesResponse, Error> {
+        let url = try URLBuilder()
+            .set(operation: .similar(media: .movie, movieId: "\(id)"))
+            .addQueryItem(name: QueryConstants.Keys.kAPIKey, value: QueryConstants.Values.kAPIKey)
+            .addQueryItem(name: QueryConstants.Keys.kLanguage, value: QueryConstants.Values.kLanguage)
+            .build()
+        
+        return try NetworkManager<MoviesResponse>(url: url, method: .get).makeRequest()
+            .catch { (error) in Fail<MoviesResponse, Error>(error: error) }
+            .eraseToAnyPublisher()
+    }
+    
+    func fetchCreditDetails(creditId: String) throws -> AnyPublisher<MovieCastDetailsResponseModel, Error> {
+        let url = try URLBuilder()
+            .set(operation: .creditDetails(creditId: creditId))
+            .addQueryItem(name: QueryConstants.Keys.kAPIKey, value: QueryConstants.Values.kAPIKey)
+            .build()
+        
+        return try NetworkManager<MovieCastDetailsResponseModel>(url: url, method: .get).makeRequest()
+            .catch { (error) in Fail<MovieCastDetailsResponseModel, Error>(error: error) }
+            .eraseToAnyPublisher()
+    }
 }
 
 extension WebServiceHandler {

@@ -76,13 +76,15 @@ extension URLBuilder {
         case topRated
         case details(media: Media, movieId: String)
         case credits(media: Media, movieId: String)
+        case creditDetails(creditId: String)
+        case similar(media: Media, movieId: String)
         
         var value: String {
             switch self {
                 
             case .trending(timeWindow: let timeWindow):
                 switch timeWindow {
-                
+                    
                 case .day:
                     return "/trending/movie/day"
                 case .week:
@@ -112,6 +114,16 @@ extension URLBuilder {
                     return "/movie/\(mediaId)/credits"
                 case .tv:
                     return "/tv/\(mediaId)/credits"
+                }
+            case .creditDetails(creditId: let creditID):
+                return "/credit/" + creditID
+            case .similar(media: let media, movieId: let mediaId):
+                switch media {
+                    
+                case .movie:
+                    return "/movie/\(mediaId)/similar"
+                case .tv:
+                    return "/tv/\(mediaId)/similar"
                 }
             }
         }

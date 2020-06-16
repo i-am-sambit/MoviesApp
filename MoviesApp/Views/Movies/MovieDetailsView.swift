@@ -9,13 +9,14 @@
 import SwiftUI
 
 struct MovieDetailsView: View {
-    @ObservedObject var viewModel: MovieDetailsViewModel = MovieDetailsViewModel()
+    @ObservedObject var viewModel: MovieDetailsViewModel
     
     @State var moveToTrailer: Bool = false
     @State var willBookTicket: Bool = false
     
     init(movie: MovieBaseProtocol) {
-        viewModel.movieId = movie.id
+        viewModel = MovieDetailsViewModel(movie: movie.id)
+        
         UITableView.appearance().tableHeaderView = UIView(frame: CGRect(x: 0, y: 0, width: 0, height: Double.leastNonzeroMagnitude))
         UINavigationBar.appearance().backgroundColor = UIColor(named: "SecondaryBackgroundColor")
     }
@@ -67,8 +68,12 @@ struct MovieDetailsView: View {
                             Divider()
                                 .padding(.horizontal, -20)
                                 .background(Color.secondary)
-                            
                             MovieCastView(casts: viewModel.casts)
+                            
+                            Divider()
+                                .padding(.horizontal, -20)
+                                .background(Color.secondary)
+                            SimilarMoviesView(movies: viewModel.similarMovies)
                         }
                     }
                     
@@ -90,6 +95,7 @@ struct MovieDetailsView: View {
         .onAppear {
             self.viewModel.fetchDetails()
             self.viewModel.fetchCredits()
+            self.viewModel.fetchSimilarMovies()
         }
     }
 }
@@ -161,7 +167,29 @@ struct MovieCastView: View {
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(alignment: .top) {
                     ForEach(casts, id: \.id) { cast in
-                        MovieCastCardView(cast: cast)
+                        NavigationLink(destination: ActorProfileView(cast: cast)) {
+                            MovieCastCardView(cast: cast)
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+struct SimilarMoviesView: View {
+    var movies: [MovieBaseProtocol]
+    
+    var body: some View {
+        VStack(alignment: .leading) {
+            Text("Similar Movies")
+                .font(.system(size: 22, weight: .bold))
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack(alignment: .top) {
+                    ForEach(movies, id: \.id) { movie in
+                        NavigationLink(destination: MovieDetailsView(movie: movie)) {
+                            MovieCardView(movie: movie)
+                        }
                     }
                 }
             }
@@ -170,7 +198,7 @@ struct MovieCastView: View {
 }
 
 struct MovieUIView_Previews: PreviewProvider {
-    static let movie = Movie(id: 429617,
+    static let movie = Movie(id: 99861,
                              name: "Think Like a Dog",
                              overview: "A 12-year-old tech prodigy whose science experiment goes awry and he forges a telepathic connection with his best friend, his dog. The duo join forces and use their unique perspectives on life to comically overcome complications of family and school.",
                              poster: "/cDbOrc2RtIA37nLm0CzVpFLrdaG.jpg",

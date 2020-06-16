@@ -17,9 +17,15 @@ class MovieDetailsViewModel: ObservableObject {
     private(set) var videos: [MovieVideo] = []
     private(set) var movie: MovieDetailsResponseModel?
     private(set) var casts: [MovieCastModel] = []
+    private(set) var similarMovies: [Movie] = []
     
     private var detailsSubscription: AnyCancellable?
     private var creditsSubscription: AnyCancellable?
+    private var similarMoviesSubscription: AnyCancellable?
+    
+    init(movie id: Int) {
+        self.movieId = id
+    }
     
     func fetchDetails() {
         do {
@@ -45,6 +51,21 @@ class MovieDetailsViewModel: ObservableObject {
                     print(completionHandler)
                 }, receiveValue: { (response) in
                     self.casts = response.cast
+                    self.objectWillChange.send()
+                })
+        } catch let error {
+            print(error.localizedDescription)
+        }
+    }
+    
+    func fetchSimilarMovies() {
+        do {
+            similarMoviesSubscription = try WebServiceHandler().fetchSimilar(movies: movieId)
+                .receive(on: RunLoop.main)
+                .sink(receiveCompletion: { (completionHandler) in
+                    print(completionHandler)
+                }, receiveValue: { (response) in
+                    self.similarMovies = response.results
                     self.objectWillChange.send()
                 })
         } catch let error {
