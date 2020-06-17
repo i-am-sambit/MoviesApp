@@ -18,7 +18,8 @@ struct MovieDetailsView: View {
         viewModel = MovieDetailsViewModel(movie: movie.id)
         
         UITableView.appearance().tableHeaderView = UIView(frame: CGRect(x: 0, y: 0, width: 0, height: Double.leastNonzeroMagnitude))
-        UINavigationBar.appearance().backgroundColor = UIColor(named: "SecondaryBackgroundColor")
+        UINavigationBar.appearance().backgroundColor = UIColor(named: "SecondaryBackgroundColor")?.withAlphaComponent(0.2)
+        UINavigationBar.appearance().isOpaque = false
     }
     
     var body: some View {
@@ -86,7 +87,7 @@ struct MovieDetailsView: View {
                     .background(Color.red)
                 }
             } else {
-                EmptyView()
+                LoaderView(isAnimating: true)
             }
         }
         .background(Color.backgroundColor)
@@ -96,6 +97,15 @@ struct MovieDetailsView: View {
             self.viewModel.fetchDetails()
             self.viewModel.fetchCredits()
             self.viewModel.fetchSimilarMovies()
+        }
+        .alert(isPresented: Binding<Bool>(
+            get: { (self.viewModel.error != nil) },
+            set: { _ in }
+        )) {
+            Alert(
+                title: Text("Error!"),
+                message: Text(self.viewModel.error?.localizedDescription ?? "")
+            )
         }
     }
 }

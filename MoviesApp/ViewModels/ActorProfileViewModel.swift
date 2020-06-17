@@ -9,9 +9,7 @@
 import Foundation
 import Combine
 
-class ActorProfileViewModel: ObservableObject {
-    let objectWillChange: ObservableObjectPublisher = ObservableObjectPublisher()
-    
+class ActorProfileViewModel: BaseViewModel {
     private var cast: MovieCastModel
     private(set) var castDetails: MovieCastDetailsResponseModel?
     
@@ -25,14 +23,14 @@ class ActorProfileViewModel: ObservableObject {
         do {
             castDetailsSubscriber = try WebServiceHandler().fetchCreditDetails(creditId: cast.creditId)
                 .receive(on: RunLoop.main)
-                .sink(receiveCompletion: { complete in
-                    print(complete)
+                .sink(receiveCompletion: { completionHandler in
+                    self.parse(completionHandler: completionHandler)
                 }) { (response) in
                     self.castDetails = response
                     self.objectWillChange.send()
             }
         } catch let error {
-            print(error)
+            self.error = error
         }
         
     }

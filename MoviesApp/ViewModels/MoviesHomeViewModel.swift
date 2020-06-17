@@ -15,8 +15,7 @@ struct Category: Identifiable {
     let movies: [MovieBaseProtocol]
 }
 
-class MoviesHomeViewModel: ObservableObject {
-    let objectWillChange: ObservableObjectPublisher = ObservableObjectPublisher()
+class MoviesHomeViewModel: BaseViewModel {
     var trendingSubscription: AnyCancellable?
     var popularSubscription: AnyCancellable?
     var nowPlayingSubscription: AnyCancellable?
@@ -29,17 +28,20 @@ class MoviesHomeViewModel: ObservableObject {
     
     var categories: [Category] = [] {
         didSet {
-            self.categories.sort { $0.id < $1.id }
-            self.objectWillChange.send()
+            if !shouldShowActivityIndicator {
+                self.categories.sort { $0.id < $1.id }
+                self.objectWillChange.send()
+            }
         }
     }
     
-    init() {
+    override init() {
+        super.init()
+        
         fetchTrendingMovies()
         
         fetchPopularMovies()
         fetchNowPlayingMovies()
-        fetchUpcomingMovies()
         fetchTopRatedMovies()
     }
     
@@ -49,7 +51,7 @@ class MoviesHomeViewModel: ObservableObject {
             self.trendingSubscription = try WebServiceHandler().fetchTrendingMovies()
                 .receive(on: RunLoop.main)
                 .sink(receiveCompletion: { completionHandler in
-                    
+                    self.parse(completionHandler: completionHandler)
                 }, receiveValue: { (response) in
                     self.categories.append(Category(id: CategoryId.trending.rawValue,
                                                     name: CategoryTitle.trending.rawValue,
@@ -57,7 +59,7 @@ class MoviesHomeViewModel: ObservableObject {
                 })
             
         } catch let error {
-            print(error.localizedDescription)
+            self.error = error
         }
     }
     
@@ -66,7 +68,7 @@ class MoviesHomeViewModel: ObservableObject {
             self.popularSubscription = try WebServiceHandler().fetchPopularMovies()
                 .receive(on: RunLoop.main)
                 .sink(receiveCompletion: { completionHandler in
-                    
+                    self.parse(completionHandler: completionHandler)
                 }, receiveValue: { (response) in
                     self.categories.append(Category(id: CategoryId.popular.rawValue,
                                                     name: CategoryTitle.popular.rawValue,
@@ -74,7 +76,7 @@ class MoviesHomeViewModel: ObservableObject {
                 })
             
         } catch let error {
-            print(error.localizedDescription)
+            self.error = error
         }
     }
     
@@ -83,7 +85,7 @@ class MoviesHomeViewModel: ObservableObject {
             self.nowPlayingSubscription = try WebServiceHandler().fetchNowPlayingMovies()
                 .receive(on: RunLoop.main)
                 .sink(receiveCompletion: { completionHandler in
-                    
+                    self.parse(completionHandler: completionHandler)
                 }, receiveValue: { (response) in
                     self.categories.append(Category(id: CategoryId.nowPlaying.rawValue,
                                                     name: CategoryTitle.nowPlaying.rawValue,
@@ -91,7 +93,7 @@ class MoviesHomeViewModel: ObservableObject {
                 })
             
         } catch let error {
-            print(error.localizedDescription)
+            self.error = error
         }
     }
     
@@ -100,7 +102,7 @@ class MoviesHomeViewModel: ObservableObject {
             self.upcomingSubscription = try WebServiceHandler().fetchUpcomingMovies()
                 .receive(on: RunLoop.main)
                 .sink(receiveCompletion: { completionHandler in
-                    
+                    self.parse(completionHandler: completionHandler)
                 }, receiveValue: { (response) in
                     self.categories.append(Category(id: CategoryId.upcoming.rawValue,
                                                     name: CategoryTitle.upcoming.rawValue,
@@ -108,7 +110,7 @@ class MoviesHomeViewModel: ObservableObject {
                 })
             
         } catch let error {
-            print(error.localizedDescription)
+            self.error = error
         }
     }
     
@@ -118,7 +120,7 @@ class MoviesHomeViewModel: ObservableObject {
             self.topRatedSubscription = try WebServiceHandler().fetchTopRatedMovies()
                 .receive(on: RunLoop.main)
                 .sink(receiveCompletion: { completionHandler in
-                    
+                    self.parse(completionHandler: completionHandler)
                 }, receiveValue: { (response) in
                     self.categories.append(Category(id: CategoryId.topRated.rawValue,
                                                     name: CategoryTitle.topRated.rawValue,
@@ -126,7 +128,7 @@ class MoviesHomeViewModel: ObservableObject {
                 })
             
         } catch let error {
-            print(error.localizedDescription)
+            self.error = error
         }
     }
     

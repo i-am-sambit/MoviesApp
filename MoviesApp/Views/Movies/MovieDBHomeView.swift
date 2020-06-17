@@ -30,13 +30,17 @@ struct MovieHomeView: View {
     
     var body: some View {
         VStack(spacing: 0) {
-            HeaderView()
-            List {
-                ForEach(self.moviesDataSource.categories) { category in
-                    MovieCategoryCell(category: category)
+            if moviesDataSource.shouldShowActivityIndicator {
+                LoaderView(isAnimating: true)
+            } else {
+                HeaderView()
+                List {
+                    ForEach(self.moviesDataSource.categories) { category in
+                        MovieCategoryCell(category: category)
+                    }
                 }
+                .padding(.top, -44)
             }
-            .padding(.top, -44)
         }
         .background(Color.backgroundColor)
     }

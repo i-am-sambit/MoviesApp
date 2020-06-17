@@ -12,12 +12,20 @@ struct TrendingMovieCard: View {
     var movie: MovieBaseProtocol
     
     var body: some View {
-        URLImageView(urlString: self.movie.poster)
-            .frame(width: UIScreen.main.bounds.size.width - 40, height: 300)
-            .aspectRatio(contentMode: .fill)
-            .clipped()
-            .cornerRadius(10)
-            .padding([.trailing, .top])
+        ZStack {
+            URLImageView(urlString: self.movie.poster)
+                .frame(width: UIScreen.main.bounds.size.width - 40, height: 300)
+                .aspectRatio(contentMode: .fill)
+                .clipped()
+            
+            GradientView(movieName: movie.name)
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .clipped()
+                .background(LinearGradient(gradient: Gradient(colors: [.clear, Color.black.opacity(0.5)]), startPoint: .top, endPoint: .bottom))
+        }
+        .frame(width: UIScreen.main.bounds.size.width - 40, height: 300)
+        .cornerRadius(10)
+        .padding([.trailing, .top])
     }
 }
 

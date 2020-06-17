@@ -9,12 +9,10 @@
 import Foundation
 import Combine
 
-class MovieDetailsViewModel: ObservableObject {
-    let objectWillChange: ObservableObjectPublisher = ObservableObjectPublisher()
+class MovieDetailsViewModel: BaseViewModel {
+    private var movieId: Int
     
-    public var movieId: Int = 0
-    
-    private(set) var videos: [MovieVideo] = []
+    private var videos: [MovieVideo] = []
     private(set) var movie: MovieDetailsResponseModel?
     private(set) var casts: [MovieCastModel] = []
     private(set) var similarMovies: [Movie] = []
@@ -32,13 +30,13 @@ class MovieDetailsViewModel: ObservableObject {
             detailsSubscription = try WebServiceHandler().fetchDetails(movie: movieId)
                 .receive(on: RunLoop.main)
                 .sink(receiveCompletion: { (completionHandler) in
-                    print(completionHandler)
+                    self.parse(completionHandler: completionHandler)
                 }, receiveValue: { (response) in
                     self.movie = response
-                    self.objectWillChange.send()
+                    self.sendLiveData()
                 })
         } catch let error {
-            print(error.localizedDescription)
+            self.error = error
         }
         
     }
@@ -48,13 +46,13 @@ class MovieDetailsViewModel: ObservableObject {
             creditsSubscription = try WebServiceHandler().fetchCredits(movie: movieId)
                 .receive(on: RunLoop.main)
                 .sink(receiveCompletion: { (completionHandler) in
-                    print(completionHandler)
+                    self.parse(completionHandler: completionHandler)
                 }, receiveValue: { (response) in
                     self.casts = response.cast
-                    self.objectWillChange.send()
+                    self.sendLiveData()
                 })
         } catch let error {
-            print(error.localizedDescription)
+            self.error = error
         }
     }
     
@@ -63,13 +61,19 @@ class MovieDetailsViewModel: ObservableObject {
             similarMoviesSubscription = try WebServiceHandler().fetchSimilar(movies: movieId)
                 .receive(on: RunLoop.main)
                 .sink(receiveCompletion: { (completionHandler) in
-                    print(completionHandler)
+                    self.parse(completionHandler: completionHandler)
                 }, receiveValue: { (response) in
                     self.similarMovies = response.results
-                    self.objectWillChange.send()
+                    self.sendLiveData()
                 })
         } catch let error {
-            print(error.localizedDescription)
+            self.error = error
+        }
+    }
+    
+    private func sendLiveData() {
+        if movie != nil, !casts.isEmpty, !similarMovies.isEmpty {
+            self.objectWillChange.send()
         }
     }
 }
