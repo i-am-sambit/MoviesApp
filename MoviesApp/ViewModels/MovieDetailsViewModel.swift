@@ -12,27 +12,64 @@ import Combine
 class MovieDetailsViewModel: ObservableObject {
     let objectWillChange: ObservableObjectPublisher = ObservableObjectPublisher()
     
-    private(set) var movie: MovieBaseProtocol
-    private(set) var videos: [MovieVideo] = []
+    public var movieId: Int = 0
     
-    init(movie: MovieBaseProtocol) {
-        self.movie = movie
-        self.fetchVideos(forMovie: movie.id)
+    private(set) var videos: [MovieVideo] = []
+    private(set) var movie: MovieDetailsResponseModel?
+    private(set) var casts: [MovieCastModel] = []
+    private(set) var similarMovies: [Movie] = []
+    
+    private var detailsSubscription: AnyCancellable?
+    private var creditsSubscription: AnyCancellable?
+    private var similarMoviesSubscription: AnyCancellable?
+    
+    init(movie id: Int) {
+        self.movieId = id
     }
     
-    private func fetchVideos(forMovie movieID: Int) {
-//        WebServiceHandler.shared.fetchTrailerVideos(movie: movieID) { (result) in
-//            DispatchQueue.main.async {
-//                switch result {
-//                    
-//                case .success(let response):
-//                    self.videos = response.results
-//                    self.objectWillChange.send()
-//                    
-//                case .failure(_):
-//                    break
-//                }
-//            }
-//        }
+    func fetchDetails() {
+        do {
+            detailsSubscription = try WebServiceHandler().fetchDetails(movie: movieId)
+                .receive(on: RunLoop.main)
+                .sink(receiveCompletion: { (completionHandler) in
+                    print(completionHandler)
+                }, receiveValue: { (response) in
+                    self.movie = response
+                    self.objectWillChange.send()
+                })
+        } catch let error {
+            print(error.localizedDescription)
+        }
+        
+    }
+    
+    func fetchCredits() {
+        do {
+            creditsSubscription = try WebServiceHandler().fetchCredits(movie: movieId)
+                .receive(on: RunLoop.main)
+                .sink(receiveCompletion: { (completionHandler) in
+                    print(completionHandler)
+                }, receiveValue: { (response) in
+                    self.casts = response.cast
+                    self.objectWillChange.send()
+                })
+        } catch let error {
+            print(error.localizedDescription)
+        }
+    }
+    
+    func fetchSimilarMovies() {
+        do {
+            similarMoviesSubscription = try WebServiceHandler().fetchSimilar(movies: movieId)
+                .receive(on: RunLoop.main)
+                .sink(receiveCompletion: { (completionHandler) in
+                    print(completionHandler)
+                }, receiveValue: { (response) in
+                    self.similarMovies = response.results
+                    self.objectWillChange.send()
+                })
+        } catch let error {
+            print(error.localizedDescription)
+        }
     }
 }

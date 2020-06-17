@@ -28,15 +28,26 @@ struct URLImageView: View {
     }
     
     var body: some View {
-        KFImage(source: .network(url))
-            .renderingMode(.original)
-            .resizable()
+        VStack {
+            if !url.absoluteString.isEmpty && !urlString.isEmpty {
+                KFImage(source: .network(url))
+                    .renderingMode(.original)
+                    .resizable()
+                    .edgesIgnoringSafeArea(.all)
+            } else {
+                placeHolderImage
+//                    .renderingMode(.original)
+                    .resizable()
+                    .foregroundColor(.primary)
+                    .edgesIgnoringSafeArea(.all)
+            }
+        }
     }
 }
 
 struct ImageView_Previews: PreviewProvider {
     static var previews: some View {
-        URLImageView(urlString: "", placeHolder: Image("avengers"))
+        URLImageView(urlString: "/4q2NNj4S5dG2RLF9CpXsej7yXl.jpg", placeHolder: Image("avengers"))
     }
 }
 

@@ -76,93 +76,58 @@ final class WebServiceHandler {
             .eraseToAnyPublisher()
     }
     
-//    func fetchTrailerVideos(movie movieID: Int, completionHandler:@escaping(Result<MovieVideoResponse, Error>)-> Void) {
-//        do {
-//            let url = try URLBuilder()
-//                .set(media: .movie)
-//                .set(media: "\(movieID)")
-//                .set(operation: .videos)
-//                .addQueryItem(name: QueryConstants.Keys.kAPIKey, value: QueryConstants.Values.kAPIKey)
-//                .addQueryItem(name: QueryConstants.Keys.kLanguage, value: QueryConstants.Values.kLanguage)
-//                .build()
-//            
-//            networkManager.make(url: url, requestType: .get, completionHandler: completionHandler)
-//        } catch let error {
-//            completionHandler(.failure(error))
-//        }
-//    }
-//    
-//    func fetchTvTodaysAiring(page: Int = 1, completionHandler:@escaping(Result<TVResponse, Error>)-> Void) {
-//        do {
-//            let url = try URLBuilder()
-//                .set(media: .tvSeries)
-//                .set(operation: .airingToday)
-//                .addQueryItem(name: QueryConstants.Keys.kAPIKey, value: QueryConstants.Values.kAPIKey)
-//                .addQueryItem(name: QueryConstants.Keys.kLanguage, value: QueryConstants.Values.kLanguage)
-//                .addQueryItem(name: QueryConstants.Keys.kPage, value: page)
-//                .build()
-//            
-//            networkManager.make(url: url, requestType: .get, completionHandler: completionHandler)
-//        } catch let error {
-//            completionHandler(.failure(error))
-//        }
-//    }
-//    
-//    func fetchTvOnTheAir(page: Int = 1, completionHandler:@escaping(Result<TVResponse, Error>)-> Void) {
-//        do {
-//            let url = try URLBuilder()
-//                .set(media: .tvSeries)
-//                .set(operation: .onAir)
-//                .addQueryItem(name: QueryConstants.Keys.kAPIKey, value: QueryConstants.Values.kAPIKey)
-//                .addQueryItem(name: QueryConstants.Keys.kLanguage, value: QueryConstants.Values.kLanguage)
-//                .addQueryItem(name: QueryConstants.Keys.kPage, value: page)
-//                .build()
-//            
-//            networkManager.make(url: url, requestType: .get, completionHandler: completionHandler)
-//        } catch let error {
-//            completionHandler(.failure(error))
-//        }
-//    }
-//    
-//    func fetchTvPopular(page: Int = 1, completionHandler:@escaping(Result<TVResponse, Error>)-> Void) {
-//        do {
-//            let url = try URLBuilder()
-//                .set(media: .tvSeries)
-//                .set(operation: .popular)
-//                .addQueryItem(name: QueryConstants.Keys.kAPIKey, value: QueryConstants.Values.kAPIKey)
-//                .addQueryItem(name: QueryConstants.Keys.kLanguage, value: QueryConstants.Values.kLanguage)
-//                .addQueryItem(name: QueryConstants.Keys.kPage, value: page)
-//                .build()
-//            
-//            networkManager.make(url: url, requestType: .get, completionHandler: completionHandler)
-//        } catch let error {
-//            completionHandler(.failure(error))
-//        }
-//    }
-//    
-//    func fetchTvTopRated(page: Int = 1, completionHandler:@escaping(Result<TVResponse, Error>)-> Void) {
-//        do {
-//            let url = try URLBuilder()
-//                .set(media: .tvSeries)
-//                .set(operation: .topRated)
-//                .addQueryItem(name: QueryConstants.Keys.kAPIKey, value: QueryConstants.Values.kAPIKey)
-//                .addQueryItem(name: QueryConstants.Keys.kLanguage, value: QueryConstants.Values.kLanguage)
-//                .addQueryItem(name: QueryConstants.Keys.kPage, value: page)
-//                .build()
-//            
-//            networkManager.make(url: url, requestType: .get, completionHandler: completionHandler)
-//        } catch let error {
-//            completionHandler(.failure(error))
-//        }
-//    }
+    func fetchDetails(movie id: Int) throws -> AnyPublisher<MovieDetailsResponseModel, Error> {
+        let url = try URLBuilder()
+            .set(operation: .details(media: .movie, movieId: "\(id)"))
+            .addQueryItem(name: QueryConstants.Keys.kAPIKey, value: QueryConstants.Values.kAPIKey)
+            .addQueryItem(name: QueryConstants.Keys.kLanguage, value: QueryConstants.Values.kLanguage)
+            .build()
+        
+        return try NetworkManager<MovieDetailsResponseModel>(url: url, method: .get).makeRequest()
+            .catch { (error) in Fail<MovieDetailsResponseModel, Error>(error: error) }
+            .eraseToAnyPublisher()
+    }
     
+    func fetchCredits(movie id: Int) throws -> AnyPublisher<MovieCreditsResponseModel, Error> {
+        let url = try URLBuilder()
+            .set(operation: .credits(media: .movie, movieId: "\(id)"))
+            .addQueryItem(name: QueryConstants.Keys.kAPIKey, value: QueryConstants.Values.kAPIKey)
+            .addQueryItem(name: QueryConstants.Keys.kLanguage, value: QueryConstants.Values.kLanguage)
+            .build()
+        
+        return try NetworkManager<MovieCreditsResponseModel>(url: url, method: .get).makeRequest()
+            .catch { (error) in Fail<MovieCreditsResponseModel, Error>(error: error) }
+            .eraseToAnyPublisher()
+    }
     
+    func fetchSimilar(movies id: Int) throws -> AnyPublisher<MoviesResponse, Error> {
+        let url = try URLBuilder()
+            .set(operation: .similar(media: .movie, movieId: "\(id)"))
+            .addQueryItem(name: QueryConstants.Keys.kAPIKey, value: QueryConstants.Values.kAPIKey)
+            .addQueryItem(name: QueryConstants.Keys.kLanguage, value: QueryConstants.Values.kLanguage)
+            .build()
+        
+        return try NetworkManager<MoviesResponse>(url: url, method: .get).makeRequest()
+            .catch { (error) in Fail<MoviesResponse, Error>(error: error) }
+            .eraseToAnyPublisher()
+    }
+    
+    func fetchCreditDetails(creditId: String) throws -> AnyPublisher<MovieCastDetailsResponseModel, Error> {
+        let url = try URLBuilder()
+            .set(operation: .creditDetails(creditId: creditId))
+            .addQueryItem(name: QueryConstants.Keys.kAPIKey, value: QueryConstants.Values.kAPIKey)
+            .build()
+        
+        return try NetworkManager<MovieCastDetailsResponseModel>(url: url, method: .get).makeRequest()
+            .catch { (error) in Fail<MovieCastDetailsResponseModel, Error>(error: error) }
+            .eraseToAnyPublisher()
+    }
 }
 
 extension WebServiceHandler {
     func setImage(urlString: String, completionHandler: @escaping(Result<Data, Error>)-> Void) {
         do {
-            let url = try URLBuilder()
+            _ = try URLBuilder()
                 .set(poster: urlString)
                 .buildImageURL()
             
