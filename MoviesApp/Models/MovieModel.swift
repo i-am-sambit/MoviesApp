@@ -74,10 +74,10 @@ struct Movie: MovieBaseProtocol, Hashable, Decodable {
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         id = try container.decode(Int.self, forKey: .id)
-        name = try container.decode(String.self, forKey: .name)
-        overview = try container.decode(String.self, forKey: .overview)
-        poster = try container.decode(String.self, forKey: .poster)
-        releaseDate = try container.decode(String.self, forKey: .releaseDate)
+        name = try container.decodeIfPresent(String.self, forKey: .name) ?? ""
+        overview = try container.decodeIfPresent(String.self, forKey: .overview) ?? ""
+        poster = try container.decodeIfPresent(String.self, forKey: .poster) ?? ""
+        releaseDate = try container.decodeIfPresent(String.self, forKey: .releaseDate) ?? ""
         rating = try container.decode(Double.self, forKey: .rating)
         popularity = Int(try container.decode(Double.self, forKey: .popularity))
     }

@@ -14,9 +14,13 @@ struct GradientView: View {
     var body: some View {
         VStack(alignment: .leading) {
             Spacer()
-            Text(movieName)
-                .font(.title)
-                .foregroundColor(.white)
+            HStack {
+                Text(movieName)
+                    .font(.title)
+                    .foregroundColor(.white)
+                    .padding(10)
+                Spacer()
+            }
         }
     }
 }
