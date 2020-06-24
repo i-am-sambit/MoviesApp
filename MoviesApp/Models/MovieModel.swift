@@ -46,7 +46,7 @@ class MoviesResponse: BaseMoviesResponse {
     
     required init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        results = try container.decode([Movie].self, forKey: .results)
+        results = try container.decodeIfPresent([Movie].self, forKey: .results) ?? []
         
         try super.init(from: decoder)
     }

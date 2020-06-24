@@ -19,15 +19,17 @@ struct CategoryTabView: View {
                     .tabItem {
                         Text(CategoryTitle.home.rawValue)
                         Image(systemName: (selectedTab == CategoryTag.home.rawValue ? "house.fill" : "house"))
-                }.tag(CategoryTag.home)
+                }
+                .tag(CategoryTag.home.rawValue)
                 .navigationBarTitle(CategoryTitle.home.rawValue)
                 .navigationBarHidden(true)
                 
                 SearchView()
-                .tabItem {
+                    .tabItem {
                         Text(CategoryTitle.search.rawValue)
                         Image(systemName: "magnifyingglass")
-                }.tag(CategoryTag.search)
+                }
+                .tag(CategoryTag.search.rawValue)
                 .navigationBarTitle(CategoryTitle.search.rawValue)
                 .navigationBarHidden(true)
                 
@@ -35,15 +37,16 @@ struct CategoryTabView: View {
                     .tabItem {
                         Text(CategoryTitle.upcoming.rawValue)
                         Image(systemName: selectedTab == CategoryTag.upcoming.rawValue ? "film.fill" : "film")
-                    }.tag(CategoryTag.upcoming)
+                }
+                .tag(CategoryTag.upcoming.rawValue)
                 .navigationBarTitle(CategoryTitle.upcoming.rawValue)
                 .navigationBarHidden(true)
                 
-                ProfileView()
-                    .tabItem {
-                        Text(CategoryTitle.profile.rawValue)
-                        Image(systemName: selectedTab == CategoryTag.profile.rawValue ? "person.fill" : "person")
-                    }.tag(CategoryTag.profile)
+                ProfileView().tabItem {
+                    Text(CategoryTitle.profile.rawValue)
+                    Image(systemName: selectedTab == CategoryTag.profile.rawValue ? "person.fill" : "person")
+                }
+                .tag(CategoryTag.profile.rawValue)
                 .navigationBarTitle(CategoryTitle.profile.rawValue)
                 .navigationBarHidden(true)
             }
@@ -54,10 +57,10 @@ struct CategoryTabView: View {
 
 extension CategoryTabView {
     private enum CategoryTag: Int {
-        case home
-        case search
-        case upcoming
-        case profile
+        case home = 0
+        case search = 1
+        case upcoming = 2
+        case profile = 3
     }
     
     private enum CategoryTitle: String {
@@ -70,6 +73,15 @@ extension CategoryTabView {
 
 struct TabController_Previews: PreviewProvider {
     static var previews: some View {
-        CategoryTabView()
+        Group {
+            CategoryTabView()
+                .preview(device: .iPhone11ProMax, displayMode: .light)
+            
+            CategoryTabView()
+                .preview(device: .iPhone11ProMax, displayMode: .dark)
+            
+            CategoryTabView()
+                .preview(device: .iPhone8Plus, displayMode: .dark)
+        }
     }
 }

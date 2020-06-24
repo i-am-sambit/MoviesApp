@@ -92,6 +92,7 @@ struct MovieDetailsView: View {
         }
         .background(Color.backgroundColor)
         .navigationBarTitle("", displayMode: .inline)
+        .navigationViewStyle(StackNavigationViewStyle())
         .edgesIgnoringSafeArea(.top)
         .onAppear {
             self.viewModel.fetchDetails()

@@ -78,6 +78,7 @@ extension URLBuilder {
         case credits(media: Media, movieId: String)
         case creditDetails(creditId: String)
         case similar(media: Media, movieId: String)
+        case search(media: Media)
         
         var value: String {
             switch self {
@@ -125,6 +126,8 @@ extension URLBuilder {
                 case .tv:
                     return "/tv/\(mediaId)/similar"
                 }
+            case .search(media: let media):
+                return "/search" + media.rawValue
             }
         }
         
@@ -135,8 +138,8 @@ extension URLBuilder {
         case week   = "/week"
     }
     
-    enum Media {
-        case movie
-        case tv
+    enum Media: String {
+        case movie = "/movie"
+        case tv = "/tv"
     }
 }

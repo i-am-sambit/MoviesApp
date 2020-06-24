@@ -35,3 +35,12 @@ extension View {
         ModifiedContent(content: self, modifier: CornerRadiusStyle(radius: radius, corners: corners))
     }
 }
+
+extension View {
+    func preview(device: PreviewDevice.Device, displayMode: ColorScheme = .light) -> some View {
+        self
+            .previewDevice(.init(rawValue: device.rawValue))
+            .previewDisplayName(device.rawValue)
+            .environment(\.colorScheme, displayMode)
+    }
+}
