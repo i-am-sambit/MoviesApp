@@ -18,7 +18,7 @@ struct MovieDetailsView: View {
         viewModel = MovieDetailsViewModel(movie: movie.id)
         
         UITableView.appearance().tableHeaderView = UIView(frame: CGRect(x: 0, y: 0, width: 0, height: Double.leastNonzeroMagnitude))
-        UINavigationBar.appearance().backgroundColor = UIColor(named: "SecondaryBackgroundColor")?.withAlphaComponent(0.2)
+        UINavigationBar.appearance().backgroundColor = UIColor.clear
         UINavigationBar.appearance().isOpaque = false
     }
     
@@ -91,8 +91,6 @@ struct MovieDetailsView: View {
             }
         }
         .background(Color.backgroundColor)
-        .navigationBarTitle("", displayMode: .inline)
-        .navigationViewStyle(StackNavigationViewStyle())
         .edgesIgnoringSafeArea(.top)
         .onAppear {
             self.viewModel.fetchDetails()

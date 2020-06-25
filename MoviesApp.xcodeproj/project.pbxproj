@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 52;
+	objectVersion = 50;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -62,8 +62,6 @@
 		36351BE0242F1EF100D0820A /* MoviesHomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36334E1A2363FE4C00635A86 /* MoviesHomeViewModel.swift */; };
 		36351BE1242F1EF100D0820A /* MovieDetailsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 363780972366C2A000722F8A /* MovieDetailsViewModel.swift */; };
 		36351BE2242F1EF100D0820A /* TheatreViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 363E64902428F742003FE3FD /* TheatreViewModel.swift */; };
-		36351BE5242F22CE00D0820A /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 36351BE4242F22CE00D0820A /* Kingfisher */; };
-		36351BE7242F22CE00D0820A /* KingfisherSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = 36351BE6242F22CE00D0820A /* KingfisherSwiftUI */; };
 		363780982366C2A000722F8A /* MovieDetailsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 363780972366C2A000722F8A /* MovieDetailsViewModel.swift */; };
 		3637809A2366FB4200722F8A /* VideosView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 363780992366FB4200722F8A /* VideosView.swift */; };
 		3637809C23671E6D00722F8A /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3637809B23671E6D00722F8A /* LoginView.swift */; };
@@ -83,6 +81,8 @@
 		3642D901249E2C8000327015 /* SearchMovieCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3642D900249E2C8000327015 /* SearchMovieCardView.swift */; };
 		3642D903249F1DB300327015 /* SearchViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3642D902249F1DB300327015 /* SearchViewModel.swift */; };
 		3643A2F12495435700CD6A18 /* Color+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3643A2F02495435700CD6A18 /* Color+Extension.swift */; };
+		36441DCC24A36411005CAA28 /* AsyncImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36441DCB24A36411005CAA28 /* AsyncImageView.swift */; };
+		36441DCE24A370D0005CAA28 /* AsyncImageBinder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36441DCD24A370D0005CAA28 /* AsyncImageBinder.swift */; };
 		364787D824974E8400A3F313 /* MovieDetailsResponseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 364787D724974E8400A3F313 /* MovieDetailsResponseModel.swift */; };
 		36498C57245EE00100562F9E /* SearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36498C56245EE00100562F9E /* SearchView.swift */; };
 		36498C59245EE1BF00562F9E /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36498C58245EE1BF00562F9E /* ProfileView.swift */; };
@@ -156,6 +156,8 @@
 		3642D900249E2C8000327015 /* SearchMovieCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchMovieCardView.swift; sourceTree = "<group>"; };
 		3642D902249F1DB300327015 /* SearchViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewModel.swift; sourceTree = "<group>"; };
 		3643A2F02495435700CD6A18 /* Color+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color+Extension.swift"; sourceTree = "<group>"; };
+		36441DCB24A36411005CAA28 /* AsyncImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsyncImageView.swift; sourceTree = "<group>"; };
+		36441DCD24A370D0005CAA28 /* AsyncImageBinder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsyncImageBinder.swift; sourceTree = "<group>"; };
 		364787D724974E8400A3F313 /* MovieDetailsResponseModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieDetailsResponseModel.swift; sourceTree = "<group>"; };
 		36498C56245EE00100562F9E /* SearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchView.swift; sourceTree = "<group>"; };
 		36498C58245EE1BF00562F9E /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
@@ -175,8 +177,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				36351BE7242F22CE00D0820A /* KingfisherSwiftUI in Frameworks */,
-				36351BE5242F22CE00D0820A /* Kingfisher in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -338,6 +338,7 @@
 		3639782D23657B9A003AA3BE /* Common */ = {
 			isa = PBXGroup;
 			children = (
+				36441DCA24A363E5005CAA28 /* AsyncImageLoader */,
 				3620F202242B744A008B8E2D /* NetworkLayer */,
 				3639782E23657BBA003AA3BE /* Configs.swift */,
 				362DD5BD2413D6F4007E410D /* ErrorManager.swift */,
@@ -363,6 +364,15 @@
 				363F2BD92499EA9800630A0D /* LoaderView.swift */,
 			);
 			path = LoaderView;
+			sourceTree = "<group>";
+		};
+		36441DCA24A363E5005CAA28 /* AsyncImageLoader */ = {
+			isa = PBXGroup;
+			children = (
+				36441DCB24A36411005CAA28 /* AsyncImageView.swift */,
+				36441DCD24A370D0005CAA28 /* AsyncImageBinder.swift */,
+			);
+			path = AsyncImageLoader;
 			sourceTree = "<group>";
 		};
 		36D9B33124979E8500E62FDA /* CardView */ = {
@@ -393,8 +403,6 @@
 			);
 			name = MoviesApp;
 			packageProductDependencies = (
-				36351BE4242F22CE00D0820A /* Kingfisher */,
-				36351BE6242F22CE00D0820A /* KingfisherSwiftUI */,
 			);
 			productName = MoviesApp;
 			productReference = 36345ECB23634C8400C2FDDF /* MoviesApp.app */;
@@ -469,7 +477,6 @@
 			);
 			mainGroup = 36345EC223634C8400C2FDDF;
 			packageReferences = (
-				36351BE3242F22CD00D0820A /* XCRemoteSwiftPackageReference "Kingfisher" */,
 			);
 			productRefGroup = 36345ECC23634C8400C2FDDF /* Products */;
 			projectDirPath = "";
@@ -521,6 +528,7 @@
 				363780982366C2A000722F8A /* MovieDetailsViewModel.swift in Sources */,
 				36B6948224A1C35E00B895C3 /* PreviewDeviceManager.swift in Sources */,
 				363F2BD72499E11500630A0D /* BaseViewModel.swift in Sources */,
+				36441DCC24A36411005CAA28 /* AsyncImageView.swift in Sources */,
 				363E7FAA2498035F0024FAF9 /* ActorProfileView.swift in Sources */,
 				36397831236580B8003AA3BE /* WebServiceHandler.swift in Sources */,
 				363F2BDA2499EA9800630A0D /* LoaderView.swift in Sources */,
@@ -540,6 +548,7 @@
 				363E648F2428F41B003FE3FD /* Date+Extension.swift in Sources */,
 				36D9B33724979FC500E62FDA /* MovieCastCardView.swift in Sources */,
 				36498C57245EE00100562F9E /* SearchView.swift in Sources */,
+				36441DCE24A370D0005CAA28 /* AsyncImageBinder.swift in Sources */,
 				366F90C82498A4ED00A969DA /* MovieCastDetailsResponseModel.swift in Sources */,
 				363D3F00249632BD00833BA5 /* View+Extension.swift in Sources */,
 				36345ECF23634C8400C2FDDF /* AppDelegate.swift in Sources */,
@@ -772,7 +781,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.iamsambit.MoviesApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SUPPORTS_MACCATALYST = YES;
+				SUPPORTS_MACCATALYST = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -795,7 +804,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.iamsambit.MoviesApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SUPPORTS_MACCATALYST = YES;
+				SUPPORTS_MACCATALYST = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -929,30 +938,6 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
-
-/* Begin XCRemoteSwiftPackageReference section */
-		36351BE3242F22CD00D0820A /* XCRemoteSwiftPackageReference "Kingfisher" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/onevcat/Kingfisher.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 5.13.2;
-			};
-		};
-/* End XCRemoteSwiftPackageReference section */
-
-/* Begin XCSwiftPackageProductDependency section */
-		36351BE4242F22CE00D0820A /* Kingfisher */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 36351BE3242F22CD00D0820A /* XCRemoteSwiftPackageReference "Kingfisher" */;
-			productName = Kingfisher;
-		};
-		36351BE6242F22CE00D0820A /* KingfisherSwiftUI */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 36351BE3242F22CD00D0820A /* XCRemoteSwiftPackageReference "Kingfisher" */;
-			productName = KingfisherSwiftUI;
-		};
-/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 36345EC323634C8400C2FDDF /* Project object */;
 }

@@ -8,7 +8,6 @@
 
 import SwiftUI
 import Combine
-import KingfisherSwiftUI
 
 struct URLImageView: View {
     var urlString: String
@@ -30,13 +29,10 @@ struct URLImageView: View {
     var body: some View {
         VStack {
             if !url.absoluteString.isEmpty && !urlString.isEmpty {
-                KFImage(source: .network(url))
-                    .renderingMode(.original)
-                    .resizable()
-                    .edgesIgnoringSafeArea(.all)
+                AsyncImageView(url: url)
             } else {
                 placeHolderImage
-//                    .renderingMode(.original)
+                    .renderingMode(.original)
                     .resizable()
                     .foregroundColor(.primary)
                     .edgesIgnoringSafeArea(.all)

@@ -22,8 +22,6 @@ struct MovieDBHomeView: View {
     
     var body: some View {
         CategoryTabView()
-            .navigationBarTitle("", displayMode: .inline)
-            .navigationBarHidden(true)
             .navigationViewStyle(StackNavigationViewStyle())
     }
 }
