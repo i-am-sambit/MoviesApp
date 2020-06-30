@@ -20,13 +20,6 @@ struct MovieDBHomeView: View {
     @State var showMore: Bool = false
     @State var isLoading: Bool = false
     
-    var body: some View {
-        CategoryTabView()
-            .navigationViewStyle(StackNavigationViewStyle())
-    }
-}
-
-struct MovieHomeView: View {
     @ObservedObject var moviesDataSource: MoviesHomeViewModel = MoviesHomeViewModel()
     
     var body: some View {

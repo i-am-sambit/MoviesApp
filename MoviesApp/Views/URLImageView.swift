@@ -29,12 +29,12 @@ struct URLImageView: View {
     var body: some View {
         VStack {
             if !url.absoluteString.isEmpty && !urlString.isEmpty {
-                AsyncImageView(url: url)
+                SPDAsyncWebImage(url: url)
             } else {
                 placeHolderImage
                     .renderingMode(.original)
                     .resizable()
-                    .foregroundColor(.primary)
+                    .foregroundColor(.secondary)
                     .edgesIgnoringSafeArea(.all)
             }
         }

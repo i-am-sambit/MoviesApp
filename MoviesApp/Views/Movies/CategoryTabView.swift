@@ -15,7 +15,7 @@ struct CategoryTabView: View {
     var body: some View {
         NavigationView {
             TabView(selection: $selectedTab) {
-                MovieHomeView()
+                MovieDBHomeView()
                     .tabItem {
                         Text(CategoryTitle.home.rawValue)
                         Image(systemName: (selectedTab == CategoryTag.home.rawValue ? "house.fill" : "house"))
@@ -33,7 +33,7 @@ struct CategoryTabView: View {
                 .navigationBarTitle(CategoryTitle.search.rawValue)
                 .navigationBarHidden(true)
                 
-                MovieHomeView()
+                MovieDBHomeView()
                     .tabItem {
                         Text(CategoryTitle.upcoming.rawValue)
                         Image(systemName: selectedTab == CategoryTag.upcoming.rawValue ? "film.fill" : "film")
