@@ -23,6 +23,8 @@ class NetworkManager<Response: Decodable>: NSObject {
     
     private let imageCache: NSCache = NSCache<NSURL, NSData>()
     
+    private var rechability = NetworkReachability.shared
+    
     init(url: URL, request: Encodable? = nil, method: RequestMethod) {
         self.url         = url
         self.request     = request
@@ -67,6 +69,7 @@ class NetworkManager<Response: Decodable>: NSObject {
         let session = URLSession(configuration: defaultSessionConfig)
         return session.dataTaskPublisher(for: try getURLRequest())
             .map { $0.data }
+//        .mapError(<#T##transform: (URLSession.DataTaskPublisher.Failure) -> Error##(URLSession.DataTaskPublisher.Failure) -> Error#>) // map error
             .decode(type: Response.self, decoder: JSONDecoder())
             .eraseToAnyPublisher()
     }

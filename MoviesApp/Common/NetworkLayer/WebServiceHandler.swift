@@ -122,6 +122,20 @@ final class WebServiceHandler {
             .catch { (error) in Fail<MovieCastDetailsResponseModel, Error>(error: error) }
             .eraseToAnyPublisher()
     }
+    
+    func search(movie query: String, page: Int = 1) throws -> AnyPublisher<MoviesResponse, Error> {
+        let url = try URLBuilder()
+            .set(operation: .search(media: .movie))
+            .addQueryItem(name: QueryConstants.Keys.kAPIKey, value: QueryConstants.Values.kAPIKey)
+            .addQueryItem(name: QueryConstants.Keys.kLanguage, value: QueryConstants.Values.kLanguage)
+            .addQueryItem(name: "query", value: query)
+            .addQueryItem(name: QueryConstants.Keys.kPage, value: page)
+            .build()
+        
+        return try NetworkManager<MoviesResponse>(url: url, method: .get).makeRequest()
+            .catch { (error) in Fail<MoviesResponse, Error>(error: error) }
+            .eraseToAnyPublisher()
+    }
 }
 
 extension WebServiceHandler {
