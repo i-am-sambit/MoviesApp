@@ -10,7 +10,7 @@ import Foundation
 import Combine
 
 final class WebServiceHandler {
-    func fetchTrendingMovies(page: Int = 1) throws -> AnyPublisher<MoviesResponse, Error> {
+    func fetchTrendingMovies(page: Int = 1) throws -> AnyPublisher<MoviesResponse, NetworkError> {
         let url = try URLBuilder()
             .set(operation: .trending(timeWindow: .day))
             .addQueryItem(name: QueryConstants.Keys.kAPIKey, value: QueryConstants.Values.kAPIKey)
@@ -19,11 +19,10 @@ final class WebServiceHandler {
             .build()
         
         return try NetworkManager<MoviesResponse>(url: url, method: .get).makeRequest()
-            .catch { (error) in Fail<MoviesResponse, Error>(error: error) }
             .eraseToAnyPublisher()
     }
     
-    func fetchPopularMovies(page: Int = 1) throws -> AnyPublisher<MoviesResponse, Error> {
+    func fetchPopularMovies(page: Int = 1) throws -> AnyPublisher<MoviesResponse, NetworkError> {
         let url = try URLBuilder()
             .set(operation: .popular)
             .addQueryItem(name: QueryConstants.Keys.kAPIKey, value: QueryConstants.Values.kAPIKey)
@@ -32,11 +31,10 @@ final class WebServiceHandler {
             .build()
         
         return try NetworkManager<MoviesResponse>(url: url, method: .get).makeRequest()
-            .catch { (error) in Fail<MoviesResponse, Error>(error: error) }
             .eraseToAnyPublisher()
     }
     
-    func fetchNowPlayingMovies(page: Int = 1) throws -> AnyPublisher<MoviesResponse, Error> {
+    func fetchNowPlayingMovies(page: Int = 1) throws -> AnyPublisher<MoviesResponse, NetworkError> {
         let url = try URLBuilder()
             .set(operation: .nowPlaying)
             .addQueryItem(name: QueryConstants.Keys.kAPIKey, value: QueryConstants.Values.kAPIKey)
@@ -45,11 +43,10 @@ final class WebServiceHandler {
             .build()
         
         return try NetworkManager<MoviesResponse>(url: url, method: .get).makeRequest()
-            .catch { (error) in Fail<MoviesResponse, Error>(error: error) }
             .eraseToAnyPublisher()
     }
     
-    func fetchUpcomingMovies(page: Int = 1) throws -> AnyPublisher<MoviesResponse, Error> {
+    func fetchUpcomingMovies(page: Int = 1) throws -> AnyPublisher<MoviesResponse, NetworkError> {
         
         let url = try URLBuilder()
             .set(operation: .upcoming)
@@ -59,11 +56,10 @@ final class WebServiceHandler {
             .build()
         
         return try NetworkManager<MoviesResponse>(url: url, method: .get).makeRequest()
-            .catch { (error) in Fail<MoviesResponse, Error>(error: error) }
             .eraseToAnyPublisher()
     }
     
-    func fetchTopRatedMovies(page: Int = 1) throws -> AnyPublisher<MoviesResponse, Error> {
+    func fetchTopRatedMovies(page: Int = 1) throws -> AnyPublisher<MoviesResponse, NetworkError> {
         let url = try URLBuilder()
             .set(operation: .topRated)
             .addQueryItem(name: QueryConstants.Keys.kAPIKey, value: QueryConstants.Values.kAPIKey)
@@ -72,11 +68,10 @@ final class WebServiceHandler {
             .build()
         
         return try NetworkManager<MoviesResponse>(url: url, method: .get).makeRequest()
-            .catch { (error) in Fail<MoviesResponse, Error>(error: error) }
             .eraseToAnyPublisher()
     }
     
-    func fetchDetails(movie id: Int) throws -> AnyPublisher<MovieDetailsResponseModel, Error> {
+    func fetchDetails(movie id: Int) throws -> AnyPublisher<MovieDetailsResponseModel, NetworkError> {
         let url = try URLBuilder()
             .set(operation: .details(media: .movie, movieId: "\(id)"))
             .addQueryItem(name: QueryConstants.Keys.kAPIKey, value: QueryConstants.Values.kAPIKey)
@@ -84,11 +79,10 @@ final class WebServiceHandler {
             .build()
         
         return try NetworkManager<MovieDetailsResponseModel>(url: url, method: .get).makeRequest()
-            .catch { (error) in Fail<MovieDetailsResponseModel, Error>(error: error) }
             .eraseToAnyPublisher()
     }
     
-    func fetchCredits(movie id: Int) throws -> AnyPublisher<MovieCreditsResponseModel, Error> {
+    func fetchCredits(movie id: Int) throws -> AnyPublisher<MovieCreditsResponseModel, NetworkError> {
         let url = try URLBuilder()
             .set(operation: .credits(media: .movie, movieId: "\(id)"))
             .addQueryItem(name: QueryConstants.Keys.kAPIKey, value: QueryConstants.Values.kAPIKey)
@@ -96,11 +90,10 @@ final class WebServiceHandler {
             .build()
         
         return try NetworkManager<MovieCreditsResponseModel>(url: url, method: .get).makeRequest()
-            .catch { (error) in Fail<MovieCreditsResponseModel, Error>(error: error) }
             .eraseToAnyPublisher()
     }
     
-    func fetchSimilar(movies id: Int) throws -> AnyPublisher<MoviesResponse, Error> {
+    func fetchSimilar(movies id: Int) throws -> AnyPublisher<MoviesResponse, NetworkError> {
         let url = try URLBuilder()
             .set(operation: .similar(media: .movie, movieId: "\(id)"))
             .addQueryItem(name: QueryConstants.Keys.kAPIKey, value: QueryConstants.Values.kAPIKey)
@@ -108,22 +101,20 @@ final class WebServiceHandler {
             .build()
         
         return try NetworkManager<MoviesResponse>(url: url, method: .get).makeRequest()
-            .catch { (error) in Fail<MoviesResponse, Error>(error: error) }
             .eraseToAnyPublisher()
     }
     
-    func fetchCreditDetails(creditId: String) throws -> AnyPublisher<MovieCastDetailsResponseModel, Error> {
+    func fetchCreditDetails(creditId: String) throws -> AnyPublisher<MovieCastDetailsResponseModel, NetworkError> {
         let url = try URLBuilder()
             .set(operation: .creditDetails(creditId: creditId))
             .addQueryItem(name: QueryConstants.Keys.kAPIKey, value: QueryConstants.Values.kAPIKey)
             .build()
         
         return try NetworkManager<MovieCastDetailsResponseModel>(url: url, method: .get).makeRequest()
-            .catch { (error) in Fail<MovieCastDetailsResponseModel, Error>(error: error) }
             .eraseToAnyPublisher()
     }
     
-    func search(movie query: String, page: Int = 1) throws -> AnyPublisher<MoviesResponse, Error> {
+    func search(movie query: String, page: Int = 1) throws -> AnyPublisher<MoviesResponse, NetworkError> {
         let url = try URLBuilder()
             .set(operation: .search(media: .movie))
             .addQueryItem(name: QueryConstants.Keys.kAPIKey, value: QueryConstants.Values.kAPIKey)
@@ -133,7 +124,6 @@ final class WebServiceHandler {
             .build()
         
         return try NetworkManager<MoviesResponse>(url: url, method: .get).makeRequest()
-            .catch { (error) in Fail<MoviesResponse, Error>(error: error) }
             .eraseToAnyPublisher()
     }
 }

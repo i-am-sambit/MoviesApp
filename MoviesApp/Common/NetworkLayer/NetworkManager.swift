@@ -65,12 +65,15 @@ class NetworkManager<Response: Decodable>: NSObject {
     ///
     /// - Parameters:
     ///   - onResult: onResult callback
-    public func makeRequest() throws -> AnyPublisher<Response, Error> {
+    public func makeRequest() throws -> AnyPublisher<Response, NetworkError> {
         let session = URLSession(configuration: defaultSessionConfig)
         return session.dataTaskPublisher(for: try getURLRequest())
             .map { $0.data }
-//        .mapError(<#T##transform: (URLSession.DataTaskPublisher.Failure) -> Error##(URLSession.DataTaskPublisher.Failure) -> Error#>) // map error
+            .mapError { NetworkError.apiError(reason: $0.localizedDescription) }
             .decode(type: Response.self, decoder: JSONDecoder())
+            .catch { failure in
+                Fail<Response, NetworkError>(error: NetworkError.apiError(reason: failure.localizedDescription))
+            }
             .eraseToAnyPublisher()
     }
     
@@ -101,5 +104,18 @@ class NetworkManager<Response: Decodable>: NSObject {
 fileprivate extension Encodable {
     func convertToData() throws -> Data {
         return try JSONEncoder().encode(self)
+    }
+}
+
+enum NetworkError: Error, LocalizedError {
+    case unknown, apiError(reason: String)
+
+    var errorDescription: String? {
+        switch self {
+        case .unknown:
+            return "Unknown error"
+        case .apiError(let reason):
+            return reason
+        }
     }
 }

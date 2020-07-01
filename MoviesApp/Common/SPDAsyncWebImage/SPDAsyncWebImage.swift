@@ -31,7 +31,7 @@ struct SPDAsyncWebImage: View {
                 placeHolder
             }
         }
-        .onAppear {  }
+        .onAppear { self.binder.load(url: self.url) }
         .onDisappear { self.binder.cancel() }
     }
 }

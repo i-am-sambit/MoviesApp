@@ -19,7 +19,7 @@ class BaseViewModel: ObservableObject {
         }
     }
     
-    func parse(completionHandler: Subscribers.Completion<Error>) {
+    func parse(completionHandler: Subscribers.Completion<NetworkError>) {
         switch completionHandler {
             
         case .finished:
