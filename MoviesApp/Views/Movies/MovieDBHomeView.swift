@@ -37,6 +37,15 @@ struct MovieDBHomeView: View {
             }
         }
         .background(Color.backgroundColor)
+        .alert(isPresented: Binding<Bool>(
+            get: { (self.moviesDataSource.error != nil) },
+            set: { _ in }
+        )) {
+            Alert(
+                title: Text("Error!"),
+                message: Text(self.moviesDataSource.error?.localizedDescription ?? "")
+            )
+        }
     }
 }
 
@@ -84,9 +93,6 @@ struct MovieCategoryCell: View {
         .padding(.bottom, 0)
     }
     
-    private func getMid() -> Int {
-        return self.category.movies.count/2
-    }
 }
 
 struct ContentView_Previews: PreviewProvider {
