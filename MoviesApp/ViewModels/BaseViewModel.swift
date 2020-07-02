@@ -8,6 +8,7 @@
 
 import Foundation
 import Combine
+import SPDNetwork
 
 class BaseViewModel: ObservableObject {
     let objectWillChange: ObservableObjectPublisher = ObservableObjectPublisher()
@@ -19,7 +20,7 @@ class BaseViewModel: ObservableObject {
         }
     }
     
-    func parse(completionHandler: Subscribers.Completion<NetworkError>) {
+    func parse(completionHandler: Subscribers.Completion<SPDNetworkError>) {
         switch completionHandler {
             
         case .finished:
