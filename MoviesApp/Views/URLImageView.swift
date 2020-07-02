@@ -7,20 +7,19 @@
 //
 
 import SwiftUI
-import Combine
+import SPDNetwork
+import SPDWebImage
 
 struct URLImageView: View {
     var urlString: String
     var placeHolderImage: Image
     private var url: URL
-    @ObservedObject private var imageLoader: ImageLoader
     
     init(urlString: String, placeHolder: Image = Image("avengers")) {
         self.urlString = urlString
         self.placeHolderImage = placeHolder
-        self.imageLoader = ImageLoader()
         
-        url = try! URLBuilder()
+        url = try! SPDNetworkURLBuilder()
             .set(poster: urlString)
             .buildImageURL()
         

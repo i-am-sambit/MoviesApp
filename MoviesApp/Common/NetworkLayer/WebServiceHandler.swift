@@ -8,114 +8,115 @@
 
 import Foundation
 import Combine
+import SPDNetwork
 
 final class WebServiceHandler {
-    func fetchTrendingMovies(page: Int = 1) throws -> AnyPublisher<MoviesResponse, NetworkError> {
-        let url = try URLBuilder()
+    func fetchTrendingMovies(page: Int = 1) throws -> AnyPublisher<MoviesResponse, SPDNetworkError> {
+        let url = try SPDNetworkURLBuilder()
             .set(operation: .trending(timeWindow: .day))
             .addQueryItem(name: QueryConstants.Keys.kAPIKey, value: QueryConstants.Values.kAPIKey)
             .addQueryItem(name: QueryConstants.Keys.kLanguage, value: QueryConstants.Values.kLanguage)
             .addQueryItem(name: QueryConstants.Keys.kPage, value: page)
             .build()
         
-        return try NetworkManager<MoviesResponse>(url: url, method: .get).makeRequest()
+        return try SPDNetworking<MoviesResponse>(url: url, method: .get).makeRequest()
             .eraseToAnyPublisher()
     }
     
-    func fetchPopularMovies(page: Int = 1) throws -> AnyPublisher<MoviesResponse, NetworkError> {
-        let url = try URLBuilder()
+    func fetchPopularMovies(page: Int = 1) throws -> AnyPublisher<MoviesResponse, SPDNetworkError> {
+        let url = try SPDNetworkURLBuilder()
             .set(operation: .popular)
             .addQueryItem(name: QueryConstants.Keys.kAPIKey, value: QueryConstants.Values.kAPIKey)
             .addQueryItem(name: QueryConstants.Keys.kLanguage, value: QueryConstants.Values.kLanguage)
             .addQueryItem(name: QueryConstants.Keys.kPage, value: page)
             .build()
         
-        return try NetworkManager<MoviesResponse>(url: url, method: .get).makeRequest()
+        return try SPDNetworking<MoviesResponse>(url: url, method: .get).makeRequest()
             .eraseToAnyPublisher()
     }
     
-    func fetchNowPlayingMovies(page: Int = 1) throws -> AnyPublisher<MoviesResponse, NetworkError> {
-        let url = try URLBuilder()
+    func fetchNowPlayingMovies(page: Int = 1) throws -> AnyPublisher<MoviesResponse, SPDNetworkError> {
+        let url = try SPDNetworkURLBuilder()
             .set(operation: .nowPlaying)
             .addQueryItem(name: QueryConstants.Keys.kAPIKey, value: QueryConstants.Values.kAPIKey)
             .addQueryItem(name: QueryConstants.Keys.kLanguage, value: QueryConstants.Values.kLanguage)
             .addQueryItem(name: QueryConstants.Keys.kPage, value: page)
             .build()
         
-        return try NetworkManager<MoviesResponse>(url: url, method: .get).makeRequest()
+        return try SPDNetworking<MoviesResponse>(url: url, method: .get).makeRequest()
             .eraseToAnyPublisher()
     }
     
-    func fetchUpcomingMovies(page: Int = 1) throws -> AnyPublisher<MoviesResponse, NetworkError> {
+    func fetchUpcomingMovies(page: Int = 1) throws -> AnyPublisher<MoviesResponse, SPDNetworkError> {
         
-        let url = try URLBuilder()
+        let url = try SPDNetworkURLBuilder()
             .set(operation: .upcoming)
             .addQueryItem(name: QueryConstants.Keys.kAPIKey, value: QueryConstants.Values.kAPIKey)
             .addQueryItem(name: QueryConstants.Keys.kLanguage, value: QueryConstants.Values.kLanguage)
             .addQueryItem(name: QueryConstants.Keys.kPage, value: page)
             .build()
         
-        return try NetworkManager<MoviesResponse>(url: url, method: .get).makeRequest()
+        return try SPDNetworking<MoviesResponse>(url: url, method: .get).makeRequest()
             .eraseToAnyPublisher()
     }
     
-    func fetchTopRatedMovies(page: Int = 1) throws -> AnyPublisher<MoviesResponse, NetworkError> {
-        let url = try URLBuilder()
+    func fetchTopRatedMovies(page: Int = 1) throws -> AnyPublisher<MoviesResponse, SPDNetworkError> {
+        let url = try SPDNetworkURLBuilder()
             .set(operation: .topRated)
             .addQueryItem(name: QueryConstants.Keys.kAPIKey, value: QueryConstants.Values.kAPIKey)
             .addQueryItem(name: QueryConstants.Keys.kLanguage, value: QueryConstants.Values.kLanguage)
             .addQueryItem(name: QueryConstants.Keys.kPage, value: page)
             .build()
         
-        return try NetworkManager<MoviesResponse>(url: url, method: .get).makeRequest()
+        return try SPDNetworking<MoviesResponse>(url: url, method: .get).makeRequest()
             .eraseToAnyPublisher()
     }
     
-    func fetchDetails(movie id: Int) throws -> AnyPublisher<MovieDetailsResponseModel, NetworkError> {
-        let url = try URLBuilder()
+    func fetchDetails(movie id: Int) throws -> AnyPublisher<MovieDetailsResponseModel, SPDNetworkError> {
+        let url = try SPDNetworkURLBuilder()
             .set(operation: .details(media: .movie, movieId: "\(id)"))
             .addQueryItem(name: QueryConstants.Keys.kAPIKey, value: QueryConstants.Values.kAPIKey)
             .addQueryItem(name: QueryConstants.Keys.kLanguage, value: QueryConstants.Values.kLanguage)
             .build()
         
-        return try NetworkManager<MovieDetailsResponseModel>(url: url, method: .get).makeRequest()
+        return try SPDNetworking<MovieDetailsResponseModel>(url: url, method: .get).makeRequest()
             .eraseToAnyPublisher()
     }
     
-    func fetchCredits(movie id: Int) throws -> AnyPublisher<MovieCreditsResponseModel, NetworkError> {
-        let url = try URLBuilder()
+    func fetchCredits(movie id: Int) throws -> AnyPublisher<MovieCreditsResponseModel, SPDNetworkError> {
+        let url = try SPDNetworkURLBuilder()
             .set(operation: .credits(media: .movie, movieId: "\(id)"))
             .addQueryItem(name: QueryConstants.Keys.kAPIKey, value: QueryConstants.Values.kAPIKey)
             .addQueryItem(name: QueryConstants.Keys.kLanguage, value: QueryConstants.Values.kLanguage)
             .build()
         
-        return try NetworkManager<MovieCreditsResponseModel>(url: url, method: .get).makeRequest()
+        return try SPDNetworking<MovieCreditsResponseModel>(url: url, method: .get).makeRequest()
             .eraseToAnyPublisher()
     }
     
-    func fetchSimilar(movies id: Int) throws -> AnyPublisher<MoviesResponse, NetworkError> {
-        let url = try URLBuilder()
+    func fetchSimilar(movies id: Int) throws -> AnyPublisher<MoviesResponse, SPDNetworkError> {
+        let url = try SPDNetworkURLBuilder()
             .set(operation: .similar(media: .movie, movieId: "\(id)"))
             .addQueryItem(name: QueryConstants.Keys.kAPIKey, value: QueryConstants.Values.kAPIKey)
             .addQueryItem(name: QueryConstants.Keys.kLanguage, value: QueryConstants.Values.kLanguage)
             .build()
         
-        return try NetworkManager<MoviesResponse>(url: url, method: .get).makeRequest()
+        return try SPDNetworking<MoviesResponse>(url: url, method: .get).makeRequest()
             .eraseToAnyPublisher()
     }
     
-    func fetchCreditDetails(creditId: String) throws -> AnyPublisher<MovieCastDetailsResponseModel, NetworkError> {
-        let url = try URLBuilder()
+    func fetchCreditDetails(creditId: String) throws -> AnyPublisher<MovieCastDetailsResponseModel, SPDNetworkError> {
+        let url = try SPDNetworkURLBuilder()
             .set(operation: .creditDetails(creditId: creditId))
             .addQueryItem(name: QueryConstants.Keys.kAPIKey, value: QueryConstants.Values.kAPIKey)
             .build()
         
-        return try NetworkManager<MovieCastDetailsResponseModel>(url: url, method: .get).makeRequest()
+        return try SPDNetworking<MovieCastDetailsResponseModel>(url: url, method: .get).makeRequest()
             .eraseToAnyPublisher()
     }
     
-    func search(movie query: String, page: Int = 1) throws -> AnyPublisher<MoviesResponse, NetworkError> {
-        let url = try URLBuilder()
+    func search(movie query: String, page: Int = 1) throws -> AnyPublisher<MoviesResponse, SPDNetworkError> {
+        let url = try SPDNetworkURLBuilder()
             .set(operation: .search(media: .movie))
             .addQueryItem(name: QueryConstants.Keys.kAPIKey, value: QueryConstants.Values.kAPIKey)
             .addQueryItem(name: QueryConstants.Keys.kLanguage, value: QueryConstants.Values.kLanguage)
@@ -123,7 +124,7 @@ final class WebServiceHandler {
             .addQueryItem(name: QueryConstants.Keys.kPage, value: page)
             .build()
         
-        return try NetworkManager<MoviesResponse>(url: url, method: .get).makeRequest()
+        return try SPDNetworking<MoviesResponse>(url: url, method: .get).makeRequest()
             .eraseToAnyPublisher()
     }
 }
@@ -131,7 +132,7 @@ final class WebServiceHandler {
 extension WebServiceHandler {
     func setImage(urlString: String, completionHandler: @escaping(Result<Data, Error>)-> Void) {
         do {
-            _ = try URLBuilder()
+            _ = try SPDNetworkURLBuilder()
                 .set(poster: urlString)
                 .buildImageURL()
             
