@@ -13,7 +13,7 @@ class TestWebServiceHandler: XCTestCase {
     var webServiceHandler: WebServiceHandler?
     
     override func setUp() {
-        webServiceHandler = WebServiceHandler()
+        webServiceHandler = WebServiceHandler.shared
     }
 
     override func tearDown() {

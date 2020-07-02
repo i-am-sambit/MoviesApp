@@ -9,35 +9,26 @@
 import SwiftUI
 
 struct HeaderView: View {
-    @Binding var showHambergerMenu: Bool
+    private var paddingTop = (UIApplication.shared.windows.first?.safeAreaInsets.top ?? 20) + 10
     
     var body: some View {
-        HStack {
-            Button(action: {
-                withAnimation {
-                    self.showHambergerMenu = !self.showHambergerMenu
-                }
-                
-            }) {
-                Image(systemName: "text.justify")
-                    .imageScale(.large)
-                    .accessibility(label: Text("Hamberger Menu"))
-                    .padding()
-                    .foregroundColor(.primary)
-            }
-            
-            Text("Movies App")
+        HStack(alignment: .bottom) {
+            Text("MovieDB")
                 .font(.largeTitle)
-                .foregroundColor(.primary)
+                .foregroundColor(.white)
+                .padding(.top, paddingTop)
+                .padding(.leading)
+                .padding(.bottom, 10)
             
             Spacer()
         }
-        .padding(.vertical)
+        .background(Color(red: 26/255, green: 57/255, blue: 85/255))
+        .edgesIgnoringSafeArea(.top)
     }
 }
 
-//struct HeaderView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        HeaderView()
-//    }
-//}
+struct HeaderView_Previews: PreviewProvider {
+    static var previews: some View {
+        HeaderView()
+    }
+}

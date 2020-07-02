@@ -7,64 +7,59 @@
 //
 
 import SwiftUI
-import Combine
+import SPDNetwork
+import SPDWebImage
 
 struct URLImageView: View {
     var urlString: String
     var placeHolderImage: Image
-    
-    @ObservedObject private var imageLoader: ImageLoader
+    private var url: URL
     
     init(urlString: String, placeHolder: Image = Image("avengers")) {
         self.urlString = urlString
         self.placeHolderImage = placeHolder
-        self.imageLoader = ImageLoader()
-    }
-    
-    var body: some View {
-        if let uiImage = imageLoader.image {
-            let image = Image(uiImage: uiImage)
-            return image
-                .renderingMode(.original)
-                .resizable()
-                .onAppear()
-        } else {
-            return placeHolderImage
-                .renderingMode(.original)
-                .resizable()
-                .onAppear {
-                    self.imageLoader.loadImageData(urlString: self.urlString)
-                }
-        }
+        
+        url = try! SPDNetworkURLBuilder()
+            .set(poster: urlString)
+            .buildImageURL()
         
     }
     
+    var body: some View {
+        VStack {
+            if !url.absoluteString.isEmpty && !urlString.isEmpty {
+                SPDAsyncWebImage(url: url)
+            } else {
+                placeHolderImage
+                    .renderingMode(.original)
+                    .resizable()
+                    .foregroundColor(.secondary)
+                    .edgesIgnoringSafeArea(.all)
+            }
+        }
+    }
 }
 
 struct ImageView_Previews: PreviewProvider {
     static var previews: some View {
-        URLImageView(urlString: "", placeHolder: Image("avengers"))
+        URLImageView(urlString: "/4q2NNj4S5dG2RLF9CpXsej7yXl.jpg", placeHolder: Image("avengers"))
     }
 }
 
 class ImageLoader: ObservableObject {
-    var image: UIImage?
-    var objectWillChange: ObservableObjectPublisher = ObservableObjectPublisher()
+    @Published var image: UIImage?
     
     func loadImageData(urlString: String) {
-        if let url: URL = URL(string: "https://image.tmdb.org/t/p/w300_and_h300_bestv2\(urlString)") {
-            URLSession.shared.dataTask(with: url) { (data, response, error) in
-                
-                DispatchQueue.main.async {
-                    guard let data = data, data.count > 0 else {
-                        return
-                    }
+        WebServiceHandler().setImage(urlString: urlString) { (result) in
+            DispatchQueue.main.async {
+                switch result {
                     
+                case .success(let data):
                     self.image = UIImage(data: data)
-                    self.objectWillChange.send()
+                case .failure(_):
+                    break
                 }
-                
-            }.resume()
+            }
         }
     }
 }
